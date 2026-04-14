@@ -30,6 +30,16 @@
 - [x] Vercel 部署成功：weken-news.vercel.app
 - [x] 自訂域名 weken.news 加入 Vercel（等待 DNS）
 
+### 2026-04-14 AI 爬蟲追蹤系統
+- [x] Astro middleware（src/middleware.ts）偵測 13 種 AI 爬蟲 User-Agent
+- [x] Upstash Redis 計數（total / daily:date / bot:name / page:path）
+- [x] /api/stats API route（server-rendered，prerender=false）
+- [x] /stats 頁面（累積到訪、今日、各爬蟲 bar chart、各頁面 bar chart）
+- [x] 導覽列 + 頁尾加「AI 數據」連結
+- [x] 切換 output: hybrid + @astrojs/vercel/serverless adapter
+- [x] 修復 nodejs18.x EOL 問題（postinstall 腳本 patch 為 nodejs20.x）
+- [x] 修復 Redis URL 有 trailing \\n 問題（.trim()）
+
 ## 進行中
 
 - [ ] 設定 weken.news DNS A record（@ → 76.76.21.21，在 Namecheap Advanced DNS）
@@ -45,6 +55,8 @@
 ## 已知問題
 
 - @astrojs/sitemap 3.7.x 與 Astro 4.16.x 在某些設定下有 reduce undefined 錯誤，已改用手動 sitemap.xml endpoint
+- @astrojs/vercel@7.8.2 在 Node 24 本機環境下 fallback 到 nodejs18.x（EOL），已用 postinstall 腳本強制 patch 為 nodejs20.x
+- Vercel env var 透過 Windows 貼上時可能有 trailing \\n，已在程式碼加 .trim() 防禦
 
 ## 重要決策
 
@@ -52,3 +64,5 @@
 - 2026-04-14 繁體中文為主（研究顯示正確在地化內容 AI 引用率高 280%）
 - 2026-04-14 域名 weken.news $8.98 首年（Namecheap，續費 $34.48/yr）
 - 2026-04-14 移除 @astrojs/sitemap，改用自製動態 sitemap endpoint
+- 2026-04-14 AI 爬蟲追蹤用 Astro middleware + Upstash Redis（server-only，不依賴 GA）
+- 2026-04-14 Redis key prefix: wkn:ai:（isolate 資料）；daily key 設 30 天 TTL
