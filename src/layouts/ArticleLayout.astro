@@ -106,9 +106,9 @@ const breadcrumbSchema = {
   <article>
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-6" aria-label="breadcrumb">
-      <a href="/" class="hover:text-gray-700">首頁</a>
+      <a href="/" class="hover:text-[#F5C518]">首頁</a>
       <span class="mx-2">/</span>
-      <a href="/articles" class="hover:text-gray-700">文章</a>
+      <a href="/articles" class="hover:text-[#F5C518]">文章</a>
       <span class="mx-2">/</span>
       <span class="text-gray-700">{title}</span>
     </nav>
@@ -117,13 +117,13 @@ const breadcrumbSchema = {
     <header class="mb-8">
       <div class="flex flex-wrap gap-2 mb-3">
         {tags.map(tag => (
-          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{tag}</span>
+          <span class="text-xs bg-yellow-50 text-[#1F2937] border border-[#F5C518]/40 px-2 py-1 rounded">{tag}</span>
         ))}
       </div>
       <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-4">{title}</h1>
 
       <!-- AEO: Direct answer summary - speakable section -->
-      <div id="article-summary" class="bg-gray-50 border-l-4 border-gray-800 px-4 py-3 rounded-r text-gray-700 text-base leading-relaxed">
+      <div id="article-summary" class="bg-yellow-50 border-l-4 border-[#F5C518] px-4 py-3 rounded-r text-[#1F2937] text-base leading-relaxed">
         <p class="font-medium text-xs text-gray-500 uppercase tracking-wide mb-1">直接回答</p>
         <p>{directAnswer}</p>
       </div>
@@ -150,7 +150,7 @@ const breadcrumbSchema = {
       prose-headings:font-bold prose-headings:text-gray-900
       prose-p:text-gray-700 prose-p:leading-relaxed
       prose-strong:text-gray-900
-      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+      prose-a:text-[#D4AF37] prose-a:no-underline hover:prose-a:underline
       prose-blockquote:border-gray-300 prose-blockquote:text-gray-600
       prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
       prose-pre:bg-gray-900">
@@ -164,7 +164,7 @@ const breadcrumbSchema = {
         <div class="space-y-4">
           {faq.map((item) => (
             <details class="group border border-gray-100 rounded-lg">
-              <summary class="cursor-pointer px-4 py-3 font-medium text-gray-800 hover:bg-gray-50 rounded-lg list-none flex justify-between items-center">
+              <summary class="cursor-pointer px-4 py-3 font-medium text-gray-800 hover:bg-yellow-50 rounded-lg list-none flex justify-between items-center">
                 {item.question}
                 <span class="text-gray-400 group-open:rotate-180 transition-transform">▾</span>
               </summary>
@@ -183,7 +183,7 @@ const breadcrumbSchema = {
         <p class="font-semibold text-gray-800">週末哥</p>
         <p class="text-sm text-gray-500 mt-1">WeKen 創辦人 · 台灣快電商 × AI 自動化 × Meta 廣告</p>
         <a href="https://www.threads.net/@weekendpu" target="_blank" rel="noopener noreferrer"
-           class="text-sm text-blue-600 hover:underline mt-1 inline-block">Threads @weekendpu</a>
+           class="text-sm text-[#F5C518] hover:underline mt-1 inline-block">Threads @weekendpu</a>
       </div>
     </div>
   </article>

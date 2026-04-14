@@ -22,10 +22,10 @@ const articles = (await getCollection('articles'))
       不是教學文，是我自己的帳本。
     </p>
     <div class="flex flex-wrap gap-3 mt-6">
-      <a href="/articles" class="px-4 py-2 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors">
+      <a href="/articles" class="px-4 py-2 bg-[#F5C518] text-[#1F2937] font-semibold text-sm rounded-lg hover:bg-yellow-400 transition-colors active:bg-yellow-500">
         看所有文章
       </a>
-      <a href="/about" class="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:border-gray-400 transition-colors">
+      <a href="/about" class="px-4 py-2 border border-[#1F2937] text-[#1F2937] text-sm rounded-lg hover:bg-gray-50 transition-colors active:bg-gray-100">
         關於週末哥
       </a>
     </div>
@@ -41,8 +41,8 @@ const articles = (await getCollection('articles'))
         { label: 'AEO 建站', desc: '從零打造這個站', tag: 'aeo' },
       ].map(item => (
         <a href={`/articles?tag=${item.tag}`}
-           class="block p-3 border border-gray-100 rounded-lg hover:border-gray-300 transition-colors">
-          <p class="font-semibold text-sm">{item.label}</p>
+           class="block p-3 border border-gray-200 rounded-lg hover:border-[#F5C518] hover:bg-yellow-50 transition-colors active:bg-yellow-100">
+          <p class="font-semibold text-sm text-[#1F2937]">{item.label}</p>
           <p class="text-xs text-gray-500 mt-0.5">{item.desc}</p>
         </a>
       ))}

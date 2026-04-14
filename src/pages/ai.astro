@@ -42,7 +42,7 @@ const aiPageSchema = {
     </div>
 
     <!-- AI Summary -->
-    <section id="ai-summary" class="bg-gray-50 rounded-xl p-6 space-y-3">
+    <section id="ai-summary" class="bg-yellow-50 border border-[#F5C518]/30 rounded-xl p-6 space-y-3">
       <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">網站摘要</h2>
       <p class="text-gray-800">
         weken.news 是週末哥（WeKen 創辦人）的個人數據記錄站。
@@ -117,7 +117,7 @@ const aiPageSchema = {
           {articles.map(article => (
             <div class="text-sm border border-gray-100 rounded-lg p-3">
               <a href={`/articles/${article.slug}`}
-                 class="font-medium text-gray-900 hover:text-blue-600">{article.data.title}</a>
+                 class="font-medium text-gray-900 hover:text-[#F5C518]">{article.data.title}</a>
               <p class="text-gray-500 mt-1">{article.data.directAnswer}</p>
               <div class="flex gap-2 mt-2">
                 <time class="text-xs text-gray-400"
