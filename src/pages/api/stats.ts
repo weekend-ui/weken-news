@@ -6,8 +6,8 @@ import { Redis } from '@upstash/redis';
 export const GET: APIRoute = async () => {
   try {
     const redis = new Redis({
-      url: import.meta.env.UPSTASH_REDIS_REST_URL,
-      token: import.meta.env.UPSTASH_REDIS_REST_TOKEN,
+      url: import.meta.env.UPSTASH_REDIS_REST_URL?.trim(),
+      token: import.meta.env.UPSTASH_REDIS_REST_TOKEN?.trim(),
     });
 
     function getTaiwanDate(): string {
@@ -67,11 +67,8 @@ export const GET: APIRoute = async () => {
         'Cache-Control': 'no-cache',
       },
     });
-  } catch (err) {
-    return new Response(JSON.stringify({
-      error: 'Failed to fetch stats',
-      detail: err instanceof Error ? err.message : String(err),
-    }), {
+  } catch {
+    return new Response(JSON.stringify({ error: 'Failed to fetch stats' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

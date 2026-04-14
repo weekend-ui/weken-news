@@ -42,8 +42,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (botName) {
     try {
       const redis = new Redis({
-        url: import.meta.env.UPSTASH_REDIS_REST_URL,
-        token: import.meta.env.UPSTASH_REDIS_REST_TOKEN,
+        url: import.meta.env.UPSTASH_REDIS_REST_URL?.trim(),
+        token: import.meta.env.UPSTASH_REDIS_REST_TOKEN?.trim(),
       });
 
       const path = new URL(context.request.url).pathname;
