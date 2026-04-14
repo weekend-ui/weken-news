@@ -30,6 +30,11 @@
 - [x] Vercel 部署成功：weken-news.vercel.app
 - [x] 自訂域名 weken.news 加入 Vercel（等待 DNS）
 
+### 2026-04-14 SEO 基建
+- [x] Google Search Console 驗證（DNS TXT record）
+- [x] Sitemap 提交：https://weken.news/sitemap.xml
+- [x] DNS A record：@ → 76.76.21.21（weken.news 正式域名）
+
 ### 2026-04-14 AI 爬蟲追蹤系統
 - [x] Astro middleware（src/middleware.ts）偵測 13 種 AI 爬蟲 User-Agent
 - [x] Upstash Redis 計數（total / daily:date / bot:name / page:path）
@@ -42,7 +47,8 @@
 
 ## 進行中
 
-- [ ] 設定 weken.news DNS A record（@ → 76.76.21.21，在 Namecheap Advanced DNS）
+- [ ] 等待 weken.news DNS 完全生效（A record 已加）
+- [ ] 等待 Google 收錄（Sitemap 已提交，需幾天）
 
 ## 待開發
 
