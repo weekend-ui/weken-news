@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="AI 爬蟲數據"
+  description="weken.news 即時 AI 爬蟲到訪數據。顯示 GPTBot、ClaudeBot、PerplexityBot 等 AI 爬蟲的累積到訪次數、今日數字和各頁面分布。"
+>
+  <div>
+    <h1 class="text-2xl font-bold mb-2">AI 爬蟲數據</h1>
+    <p class="text-gray-500 text-sm mb-8">weken.news 被 AI 爬蟲到訪的即時數字</p>
+
+    <!-- Main counters -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <div class="border border-[#F5C518] bg-yellow-50 rounded-xl p-5">
+        <p class="text-xs text-gray-500 mb-1">累積 AI 到訪</p>
+        <p id="stat-total" class="text-3xl font-bold text-[#1F2937]">—</p>
+      </div>
+      <div class="border border-gray-200 rounded-xl p-5">
+        <p class="text-xs text-gray-500 mb-1">今日到訪</p>
+        <p id="stat-today" class="text-3xl font-bold text-[#1F2937]">—</p>
+      </div>
+    </div>
+
+    <!-- Per-bot breakdown -->
+    <section class="mb-8">
+      <h2 class="text-base font-bold mb-3">各爬蟲分類</h2>
+      <div id="stat-bots" class="space-y-2">
+        <div class="text-sm text-gray-400">載入中...</div>
+      </div>
+    </section>
+
+    <!-- Per-page breakdown -->
+    <section class="mb-8">
+      <h2 class="text-base font-bold mb-3">各頁面到訪</h2>
+      <div id="stat-pages" class="space-y-2">
+        <div class="text-sm text-gray-400">載入中...</div>
+      </div>
+    </section>
+
+    <p id="stat-updated" class="text-xs text-gray-400"></p>
+  </div>
+
+  <script>
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+
+        // Total & today
+        document.getElementById('stat-total')!.textContent =
+          (data.total || 0).toLocaleString('zh-TW');
+        document.getElementById('stat-today')!.textContent =
+          (data.today || 0).toLocaleString('zh-TW');
+
+        // Bots
+        const botsEl = document.getElementById('stat-bots')!;
+        const bots = Object.entries(data.bots || {})
+          .sort(([, a], [, b]) => (b as number) - (a as number));
+
+        if (bots.length === 0) {
+          botsEl.innerHTML = '<p class="text-sm text-gray-400">尚無資料</p>';
+        } else {
+          const maxBot = Math.max(...bots.map(([, v]) => v as number));
+          botsEl.innerHTML = bots.map(([name, count]) => {
+            const pct = maxBot > 0 ? Math.round(((count as number) / maxBot) * 100) : 0;
+            return `
+              <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-700 w-32 shrink-0">${name}</span>
+                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                  <div class="bg-[#F5C518] h-2 rounded-full" style="width:${pct}%"></div>
+                </div>
+                <span class="text-sm font-medium text-[#1F2937] w-12 text-right">${(count as number).toLocaleString()}</span>
+              </div>`;
+          }).join('');
+        }
+
+        // Pages
+        const pagesEl = document.getElementById('stat-pages')!;
+        const pages = Object.entries(data.topPages || {})
+          .sort(([, a], [, b]) => (b as number) - (a as number));
+
+        if (pages.length === 0) {
+          pagesEl.innerHTML = '<p class="text-sm text-gray-400">尚無資料</p>';
+        } else {
+          const maxPage = Math.max(...pages.map(([, v]) => v as number));
+          pagesEl.innerHTML = pages.map(([path, count]) => {
+            const pct = maxPage > 0 ? Math.round(((count as number) / maxPage) * 100) : 0;
+            return `
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-600 w-40 shrink-0 truncate">${path}</span>
+                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                  <div class="bg-[#1F2937] h-2 rounded-full" style="width:${pct}%"></div>
+                </div>
+                <span class="text-sm font-medium text-[#1F2937] w-12 text-right">${(count as number).toLocaleString()}</span>
+              </div>`;
+          }).join('');
+        }
+
+        // Updated time
+        if (data.updatedAt) {
+          const d = new Date(data.updatedAt);
+          document.getElementById('stat-updated')!.textContent =
+            `更新時間：${d.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`;
+        }
+      } catch {
+        document.getElementById('stat-total')!.textContent = '讀取失敗';
+      }
+    }
+
+    loadStats();
+  </script>
+</BaseLayout>
