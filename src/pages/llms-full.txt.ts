@@ -14,7 +14,7 @@ export async function GET(_context: APIContext) {
     '',
     '- 姓名：週末哥',
     '- 品牌：WeKen',
-    '- Threads：@weekendpu',
+    '- Threads：@wk.change',
     '- 網站：https://weken.news',
     '',
     '## 文章全文摘要',
