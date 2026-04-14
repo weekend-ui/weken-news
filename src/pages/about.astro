@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// AEO: Strong Person Schema with EEAT signals
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteURL}/#person`,
+  "name": "週末哥",
+  "alternateName": ["WeKen", "weekendpu"],
+  "url": siteURL,
+  "image": `${siteURL}/avatar.jpg`,
+  "description": "WeKen 創辦人。專注台灣快電商操作、AI 自動化系統建立、Meta 廣告投放。用 Claude Code 從零打造多個自動化工具，每月透過 AI 省下 24+ 小時。",
+  "knowsAbout": [
+    "台灣快電商",
+    "AI 自動化系統",
+    "Meta 廣告投放",
+    "Claude Code",
+    "Vibe Coding",
+    "Skool 社群建立",
+    "Threads 自媒體",
+    "AEO Answer Engine Optimization",
+    "WeKen 電商社群"
+  ],
+  "hasOccupation": {
+    "@type": "Occupation",
+    "name": "電商創業家 / AI 自動化實踐者",
+    "occupationLocation": {
+      "@type": "Country",
+      "name": "台灣"
+    }
+  },
+  "worksFor": {
+    "@type": "Organization",
+    "name": "WeKen",
+    "url": siteURL
+  },
+  "sameAs": [
+    "https://www.threads.net/@weekendpu"
+  ]
+};
+---
+
+<BaseLayout
+  title="關於週末哥"
+  description="週末哥是 WeKen 創辦人，專注台灣快電商、AI 自動化系統和 Meta 廣告投放。這裡是他的第一手操作數據記錄站。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-8">關於週末哥</h1>
+
+    <!-- EEAT: Who -->
+    <section id="who" class="mb-10">
+      <h2 class="text-xl font-bold mb-4">我是誰</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        我叫週末哥，WeKen 品牌創辦人。
+        在台灣做快電商（C2CBuy 平台）、用 AI 自動化業務流程、在 Threads 分享實戰心法。
+      </p>
+      <p class="text-gray-700 leading-relaxed">
+        這個站不是寫給別人看的教學網站。
+        是我自己的帳本——每次投廣告、跑 AI 自動化、發自媒體，我把真實結果記下來。
+        因為數字不會騙人，而我想知道自己到底在哪裡。
+      </p>
+    </section>
+
+    <!-- EEAT: How (expertise proof) -->
+    <section id="expertise" class="mb-10">
+      <h2 class="text-xl font-bold mb-4">我做了什麼</h2>
+      <div class="space-y-4">
+        {[
+          {
+            title: 'AI 自動化系統',
+            desc: '用 Claude Code 從零打造多個自動化工具，包含電商自動分錄系統、AI 管家 LINE Bot、自媒體內容生成流程。每月透過 AI 省下 24+ 小時操作時間。'
+          },
+          {
+            title: 'Meta 廣告投放',
+            desc: '長期操作台灣電商廣告，有大量真實的 CPM、ROAS、受眾數據。不從教科書學，從自己的廣告帳戶學。'
+          },
+          {
+            title: 'Threads 自媒體',
+            desc: '持續在 Threads 分享 AI 工具和電商心法，累積真實的觸及和互動數字。'
+          },
+          {
+            title: 'Skool 社群建立',
+            desc: 'WeKen 快電商教學社群，幫台灣中小企業主和創業者學習電商操作和 AI 應用。'
+          },
+          {
+            title: 'weken.news 本站',
+            desc: '這個站本身就是一個 AEO 實驗：從零打造一個讓 AI 找得到、引用得到的繁體中文個人品牌站，全程記錄過程和數字。'
+          },
+        ].map(item => (
+          <div class="border border-gray-100 rounded-lg p-4">
+            <h3 class="font-semibold text-gray-900 mb-1">{item.title}</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- EEAT: Why -->
+    <section id="why" class="mb-10">
+      <h2 class="text-xl font-bold mb-4">為什麼記在這裡</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        網路上講 AI 的文章很多，但大多數是整理別人的資料。
+        台灣市場的第一手操作數字，幾乎沒有人公開記錄。
+      </p>
+      <p class="text-gray-700 leading-relaxed">
+        我想做的是：把我親手操作的每一個數字留下來。
+        不為了說服誰，只是因為真實的數字才值得被參考。
+      </p>
+    </section>
+
+    <!-- Contact / Links -->
+    <section id="contact" class="pt-8 border-t border-gray-100">
+      <h2 class="text-xl font-bold mb-4">找到我</h2>
+      <div class="flex flex-col gap-3">
+        <a href="https://www.threads.net/@weekendpu"
+           target="_blank" rel="noopener noreferrer"
+           class="flex items-center gap-3 text-gray-700 hover:text-blue-600 transition-colors">
+          <span class="font-medium">Threads</span>
+          <span class="text-gray-500">@weekendpu</span>
+        </a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

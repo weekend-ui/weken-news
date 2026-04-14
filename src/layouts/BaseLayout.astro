@@ -1,0 +1,148 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL?: string;
+  ogImage?: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  updatedDate?: Date;
+}
+
+const {
+  title,
+  description,
+  canonicalURL = Astro.url.href,
+  ogImage = '/og-default.png',
+  type = 'website',
+  pubDate,
+  updatedDate,
+} = Astro.props;
+
+const siteURL = 'https://weken.news';
+const fullTitle = title === '週末哥 | weken.news' ? title : `${title} | 週末哥 weken.news`;
+
+// AEO: Organization + Website + Person combined JSON-LD
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteURL}/#website`,
+      "url": siteURL,
+      "name": "weken.news",
+      "description": "週末哥的第一手數據記錄：AI 自動化、電商、廣告、自媒體",
+      "inLanguage": "zh-TW",
+      "publisher": { "@id": `${siteURL}/#person` }
+    },
+    {
+      "@type": "Organization",
+      "@id": `${siteURL}/#organization`,
+      "name": "WeKen",
+      "url": siteURL,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${siteURL}/logo.png`
+      },
+      "sameAs": [
+        "https://www.threads.net/@weekendpu"
+      ],
+      "founder": { "@id": `${siteURL}/#person` }
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteURL}/#person`,
+      "name": "週末哥",
+      "alternateName": "WeKen",
+      "url": siteURL,
+      "description": "WeKen 創辦人，台灣快電商操作、AI 自動化系統、Meta 廣告投放、Skool 社群建立",
+      "knowsAbout": ["台灣電商", "AI自動化", "Meta廣告", "Threads", "Claude Code", "Vibe Coding"],
+      "sameAs": [
+        "https://www.threads.net/@weekendpu"
+      ],
+      "worksFor": { "@id": `${siteURL}/#organization` }
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalURL}#webpage`,
+      "url": canonicalURL,
+      "name": fullTitle,
+      "description": description,
+      "isPartOf": { "@id": `${siteURL}/#website` },
+      "about": { "@id": `${siteURL}/#person` },
+      "inLanguage": "zh-TW"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="language" content="zh-TW" />
+    <link rel="alternate" hreflang="zh-TW" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteURL}${ogImage}`} />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content="weken.news" />
+    {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+    {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+
+    <!-- RSS Feed Discovery -->
+    <link rel="alternate" type="application/rss+xml" title="weken.news RSS" href="/rss.xml" />
+
+    <!-- AEO: Site-level Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
+
+    <!-- Tailwind via CDN for simplicity -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-white text-gray-900 font-sans min-h-screen">
+    <header class="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur z-10">
+      <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="/" class="font-bold text-lg tracking-tight">
+          weken.news
+          <span class="text-sm font-normal text-gray-500 ml-1">週末哥的數據記錄</span>
+        </a>
+        <nav class="flex gap-6 text-sm text-gray-600">
+          <a href="/articles" class="hover:text-gray-900 transition-colors">文章</a>
+          <a href="/about" class="hover:text-gray-900 transition-colors">關於</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-10">
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-100 mt-20">
+      <div class="max-w-3xl mx-auto px-4 py-8 text-sm text-gray-500">
+        <div class="flex flex-col sm:flex-row justify-between gap-4">
+          <div>
+            <p class="font-medium text-gray-700">週末哥 | weken.news</p>
+            <p>台灣電商 × AI 自動化 × 廣告投放的第一手數據</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <a href="https://www.threads.net/@weekendpu" target="_blank" rel="noopener noreferrer" class="hover:text-gray-900">Threads @weekendpu</a>
+            <a href="/rss.xml" class="hover:text-gray-900">RSS Feed</a>
+            <a href="/ai" class="hover:text-gray-900">AI 資訊頁</a>
+          </div>
+        </div>
+        <p class="mt-6 text-xs">v1.0 · © 2026 WeKen · weken.news</p>
+      </div>
+    </footer>
+  </body>
+</html>

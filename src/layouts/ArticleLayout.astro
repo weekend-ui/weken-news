@@ -1,0 +1,190 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, directAnswer, faq, howToSteps, speakableSections } = article.data;
+
+const siteURL = 'https://weken.news';
+const canonicalURL = `${siteURL}/articles/${article.slug}`;
+
+// AEO: Article Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${canonicalURL}#article`,
+  "headline": title,
+  "description": description,
+  "datePublished": pubDate.toISOString(),
+  "dateModified": (updatedDate || pubDate).toISOString(),
+  "author": {
+    "@type": "Person",
+    "@id": `${siteURL}/#person`,
+    "name": "週末哥"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": `${siteURL}/#organization`,
+    "name": "WeKen"
+  },
+  "mainEntityOfPage": { "@id": `${canonicalURL}#webpage` },
+  "inLanguage": "zh-TW",
+  "keywords": tags.join(', '),
+  "url": canonicalURL
+};
+
+// AEO: FAQ Schema
+const faqSchema = faq.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faq.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer
+    }
+  }))
+} : null;
+
+// AEO: HowTo Schema
+const howToSchema = howToSteps && howToSteps.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": title,
+  "description": description,
+  "step": howToSteps.map((step, i) => ({
+    "@type": "HowToStep",
+    "position": i + 1,
+    "name": step.name,
+    "text": step.text
+  }))
+} : null;
+
+// AEO: Speakable Schema
+const speakableSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": speakableSections.map(s => `#${s}`)
+  },
+  "url": canonicalURL
+};
+
+// AEO: BreadcrumbList
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "首頁", "item": siteURL },
+    { "@type": "ListItem", "position": 2, "name": "文章", "item": `${siteURL}/articles` },
+    { "@type": "ListItem", "position": 3, "name": title, "item": canonicalURL }
+  ]
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalURL={canonicalURL}
+  type="article"
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+>
+  <!-- AEO: Article-specific Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  {howToSchema && <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />}
+  <script type="application/ld+json" set:html={JSON.stringify(speakableSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <article>
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-6" aria-label="breadcrumb">
+      <a href="/" class="hover:text-gray-700">首頁</a>
+      <span class="mx-2">/</span>
+      <a href="/articles" class="hover:text-gray-700">文章</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-700">{title}</span>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        {tags.map(tag => (
+          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{tag}</span>
+        ))}
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-4">{title}</h1>
+
+      <!-- AEO: Direct answer summary - speakable section -->
+      <div id="article-summary" class="bg-gray-50 border-l-4 border-gray-800 px-4 py-3 rounded-r text-gray-700 text-base leading-relaxed">
+        <p class="font-medium text-xs text-gray-500 uppercase tracking-wide mb-1">直接回答</p>
+        <p>{directAnswer}</p>
+      </div>
+
+      <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+        <span>週末哥</span>
+        <span>·</span>
+        <time datetime={pubDate.toISOString()}>
+          {pubDate.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+        {updatedDate && (
+          <>
+            <span>·</span>
+            <span>更新：<time datetime={updatedDate.toISOString()}>
+              {updatedDate.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time></span>
+          </>
+        )}
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="prose prose-gray max-w-none
+      prose-headings:font-bold prose-headings:text-gray-900
+      prose-p:text-gray-700 prose-p:leading-relaxed
+      prose-strong:text-gray-900
+      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+      prose-blockquote:border-gray-300 prose-blockquote:text-gray-600
+      prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
+      prose-pre:bg-gray-900">
+      <slot />
+    </div>
+
+    <!-- AEO: FAQ Section - speakable + FAQ Schema -->
+    {faq.length > 0 && (
+      <section id="article-conclusion" class="mt-12 pt-8 border-t border-gray-100">
+        <h2 class="text-xl font-bold mb-6">常見問題</h2>
+        <div class="space-y-4">
+          {faq.map((item) => (
+            <details class="group border border-gray-100 rounded-lg">
+              <summary class="cursor-pointer px-4 py-3 font-medium text-gray-800 hover:bg-gray-50 rounded-lg list-none flex justify-between items-center">
+                {item.question}
+                <span class="text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <div class="px-4 pb-3 pt-1 text-gray-600 text-sm leading-relaxed">
+                {item.answer}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Author signature -->
+    <div class="mt-12 pt-8 border-t border-gray-100 flex items-start gap-4">
+      <div>
+        <p class="font-semibold text-gray-800">週末哥</p>
+        <p class="text-sm text-gray-500 mt-1">WeKen 創辦人 · 台灣快電商 × AI 自動化 × Meta 廣告</p>
+        <a href="https://www.threads.net/@weekendpu" target="_blank" rel="noopener noreferrer"
+           class="text-sm text-blue-600 hover:underline mt-1 inline-block">Threads @weekendpu</a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

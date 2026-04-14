@@ -1,0 +1,38 @@
+# weken.news robots.txt
+# AEO-optimized: explicitly allow all major AI crawlers
+
+User-agent: *
+Allow: /
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Meta
+User-agent: FacebookBot
+Allow: /
+
+# Apple
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://weken.news/sitemap.xml

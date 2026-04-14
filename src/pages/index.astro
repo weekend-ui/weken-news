@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout
+  title="週末哥 | weken.news"
+  description="週末哥（WeKen 創辦人）的第一手數據記錄。AI 自動化效益、Meta 廣告實測、Threads 自媒體成效、從零打造 AEO 網站——全部來自真實操作，不是整理文。"
+>
+  <!-- Hero -->
+  <section class="mb-16">
+    <h1 class="text-3xl sm:text-4xl font-bold leading-tight mb-4">
+      這裡記的是真實數字
+    </h1>
+    <p class="text-lg text-gray-600 leading-relaxed max-w-2xl">
+      我是週末哥，WeKen 創辦人。
+      我把每次投廣告、用 AI 自動化業務、在 Threads 發文的結果記在這裡。
+      不是教學文，是我自己的帳本。
+    </p>
+    <div class="flex flex-wrap gap-3 mt-6">
+      <a href="/articles" class="px-4 py-2 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors">
+        看所有文章
+      </a>
+      <a href="/about" class="px-4 py-2 border border-gray-200 text-sm rounded-lg hover:border-gray-400 transition-colors">
+        關於週末哥
+      </a>
+    </div>
+  </section>
+
+  <!-- 主題標籤 -->
+  <section class="mb-12">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {[
+        { label: 'Meta 廣告', desc: '真實 ROAS / CPM', tag: 'meta-ads' },
+        { label: 'AI 自動化', desc: '省了多少時間', tag: 'ai-automation' },
+        { label: 'Threads 自媒體', desc: '觸及和成長數字', tag: 'threads' },
+        { label: 'AEO 建站', desc: '從零打造這個站', tag: 'aeo' },
+      ].map(item => (
+        <a href={`/articles?tag=${item.tag}`}
+           class="block p-3 border border-gray-100 rounded-lg hover:border-gray-300 transition-colors">
+          <p class="font-semibold text-sm">{item.label}</p>
+          <p class="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 最新文章 -->
+  <section>
+    <h2 class="text-xl font-bold mb-6">最新記錄</h2>
+    {articles.length === 0 ? (
+      <p class="text-gray-500">第一篇文章即將上線。</p>
+    ) : (
+      <div class="space-y-6">
+        {articles.map(article => (
+          <a href={`/articles/${article.slug}`}
+             class="block group">
+            <article class="border border-gray-100 rounded-xl p-5 hover:border-gray-300 transition-colors">
+              <div class="flex flex-wrap gap-2 mb-2">
+                {article.data.tags.slice(0, 3).map(tag => (
+                  <span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded">{tag}</span>
+                ))}
+              </div>
+              <h3 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                {article.data.title}
+              </h3>
+              <p class="text-sm text-gray-600 leading-relaxed line-clamp-2">
+                {article.data.directAnswer}
+              </p>
+              <time class="text-xs text-gray-400 mt-3 block"
+                    datetime={article.data.pubDate.toISOString()}>
+                {article.data.pubDate.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            </article>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>

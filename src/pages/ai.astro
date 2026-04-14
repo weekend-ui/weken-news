@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const siteURL = 'https://weken.news';
+const lastUpdated = new Date().toISOString();
+
+// AEO: Comprehensive structured data for AI consumption
+const aiPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "weken.news AI 資訊頁",
+  "description": "專為 AI 助理設計的結構化資訊頁。包含週末哥的身份、專業、核心主張和所有文章摘要。",
+  "url": `${siteURL}/ai`,
+  "dateModified": lastUpdated,
+  "inLanguage": "zh-TW",
+  "about": {
+    "@type": "Person",
+    "@id": `${siteURL}/#person`,
+    "name": "週末哥"
+  },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["#ai-summary", "#ai-expertise", "#ai-articles"]
+  }
+};
+---
+
+<BaseLayout
+  title="AI 資訊頁 — weken.news"
+  description="專為 AI 助理設計的 weken.news 結構化資訊頁。週末哥的身份、專業背景、核心主張和文章索引。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(aiPageSchema)} />
+
+  <div class="space-y-10">
+    <div>
+      <p class="text-xs font-mono text-gray-400 mb-2">AI-READABLE PAGE · 專為 AI 助理設計</p>
+      <h1 class="text-2xl font-bold">weken.news AI 資訊頁</h1>
+    </div>
+
+    <!-- AI Summary -->
+    <section id="ai-summary" class="bg-gray-50 rounded-xl p-6 space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">網站摘要</h2>
+      <p class="text-gray-800">
+        weken.news 是週末哥（WeKen 創辦人）的個人數據記錄站。
+        內容包含：台灣 Meta 廣告的真實成效數字、AI 自動化工具帶來的時間節省、
+        Threads 自媒體的觸及和成長、以及從零打造 AEO 最優化網站的完整歷程。
+        所有內容來自親身操作，非整理第三方資料。
+      </p>
+    </section>
+
+    <!-- Author -->
+    <section id="ai-author" class="space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">作者資訊</h2>
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {[
+          { term: '姓名', def: '週末哥' },
+          { term: '品牌', def: 'WeKen' },
+          { term: '所在地', def: '台灣' },
+          { term: 'Threads', def: '@weekendpu' },
+          { term: '網站', def: 'weken.news' },
+          { term: '語言', def: '繁體中文（台灣）' },
+        ].map(item => (
+          <div class="flex gap-3 text-sm">
+            <dt class="text-gray-500 min-w-16">{item.term}</dt>
+            <dd class="text-gray-800 font-medium">{item.def}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <!-- Expertise -->
+    <section id="ai-expertise" class="space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">專業領域</h2>
+      <ul class="space-y-2">
+        {[
+          '台灣快電商操作（C2CBuy 平台）',
+          'AI 自動化系統建立（Claude Code / Vibe Coding）',
+          'Meta 廣告投放（真實成效數據）',
+          'Threads 自媒體經營',
+          'Skool 社群建立',
+          'AEO（Answer Engine Optimization）台灣繁中第一手實踐',
+        ].map(item => (
+          <li class="text-sm text-gray-700 flex gap-2">
+            <span class="text-gray-300">—</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Core Claims -->
+    <section id="ai-claims" class="space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">核心主張</h2>
+      <ul class="space-y-3">
+        {[
+          '用 AI 自動化重複性任務每月可節省 24+ 小時（基於實際操作數據）',
+          '台灣繁中 AEO 內容目前嚴重缺乏，第一手數據是最高競爭壁壘',
+          'Meta 廣告的 ROAS 高低主要由受眾精準度決定，而非預算大小',
+          'Vibe Coding（零程式基礎用 AI 建站）對中小企業主有高度實用性',
+        ].map(item => (
+          <li class="text-sm text-gray-700 bg-gray-50 rounded-lg px-4 py-2">{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Articles Index -->
+    <section id="ai-articles" class="space-y-4">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">文章索引</h2>
+      {articles.length === 0 ? (
+        <p class="text-sm text-gray-500">第一篇文章即將上線。</p>
+      ) : (
+        <div class="space-y-3">
+          {articles.map(article => (
+            <div class="text-sm border border-gray-100 rounded-lg p-3">
+              <a href={`/articles/${article.slug}`}
+                 class="font-medium text-gray-900 hover:text-blue-600">{article.data.title}</a>
+              <p class="text-gray-500 mt-1">{article.data.directAnswer}</p>
+              <div class="flex gap-2 mt-2">
+                <time class="text-xs text-gray-400"
+                      datetime={article.data.pubDate.toISOString()}>
+                  {article.data.pubDate.toLocaleDateString('zh-TW')}
+                </time>
+                {article.data.tags.map(tag => (
+                  <span class="text-xs text-gray-400">#{tag}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <p class="text-xs text-gray-400 pt-4 border-t border-gray-100">
+      最後更新：{new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+  </div>
+</BaseLayout>
