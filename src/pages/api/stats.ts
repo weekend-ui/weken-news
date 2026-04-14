@@ -68,7 +68,10 @@ export const GET: APIRoute = async () => {
       },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch stats' }), {
+    return new Response(JSON.stringify({
+      error: 'Failed to fetch stats',
+      detail: err instanceof Error ? err.message : String(err),
+    }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
