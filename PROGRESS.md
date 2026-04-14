@@ -24,10 +24,15 @@
 - [x] 第一篇文章：「從零打造 AEO 網站：第一天的決策和數字」
 - [x] Tailwind + @tailwindcss/typography
 
+### 2026-04-14 品牌色 + 部署
+- [x] 品牌色全站套用（黃 #F5C518 + 深灰 #1F2937 + 白底）
+- [x] GitHub 推送：weekend-ui/weken-news
+- [x] Vercel 部署成功：weken-news.vercel.app
+- [x] 自訂域名 weken.news 加入 Vercel（等待 DNS）
+
 ## 進行中
 
-- [ ] 部署到 Vercel
-- [ ] 設定 weken.news DNS 指向 Vercel
+- [ ] 設定 weken.news DNS A record（@ → 76.76.21.21，在 Namecheap Advanced DNS）
 
 ## 待開發
 
