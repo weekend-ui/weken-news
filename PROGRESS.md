@@ -45,6 +45,16 @@
 - [x] 修復 nodejs18.x EOL 問題（postinstall 腳本 patch 為 nodejs20.x）
 - [x] 修復 Redis URL 有 trailing \\n 問題（.trim()）
 
+### 2026-04-15 文章擴充
+- [x] 第二篇：「Claude Code 建 AEO 網站，實際省了幾小時？」（44 小時省時數字）
+- [x] 第三篇：「如何知道 GPTBot 有沒有在爬你的網站？」（AI 爬蟲追蹤系統技術）
+- [x] 第四篇：「我讓 AI 自動記錄每次幫我省了多少時間」（省時記錄系統設計）
+- [x] 第五篇：「被爬不等於被引用」（AEO 真正的指標）
+- [x] 第六篇：「AEO 競品分析實錄：空白品類發現」（75% vs 20% 機率方法論）
+- [x] 第七篇：「AEO 被引用後的完整轉換路徑」（AI 引用 → 成交全路徑）
+- [x] 文章頁作者 bio 更新：WeKen 創辦人 x 行銷顧問 × Meta廣告 x Google Ads x AI 自動化 × 快電商
+- [x] Skool 貼文（AI爬蟲追蹤系統）完整 Learning Loop + style.md 更新
+
 ## 進行中
 
 - [ ] 等待 weken.news DNS 完全生效（A record 已加）
