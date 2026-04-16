@@ -56,6 +56,10 @@
 - [x] 文章頁作者 bio 更新：WeKen 創辦人 x 行銷顧問 × Meta廣告 x Google Ads x AI 自動化 × 快電商
 - [x] Skool 貼文（AI爬蟲追蹤系統）完整 Learning Loop + style.md 更新
 
+### 2026-04-16 文章擴充
+- [x] 第九篇：「AEO 不是一件事：訓練資料、EEAT、站外實體的三層邏輯」（Harris 框架 + weken.news 實況）
+- [x] 第十篇：「AI 額度燒很快？7個你可能不知道的 Token 浪費習慣」（量化估算版）
+
 ## 進行中
 
 - [ ] 等待 weken.news DNS 完全生效（A record 已加）
