@@ -6,7 +6,7 @@ tags: ["claude design", "自媒體", "品牌合作", "AI工具", "提案"]
 directAnswer: "Claude Design是Anthropic推出的實驗性AI視覺設計工具，輸入文字描述即可生成App原型、簡報和品牌企劃書，支援即時修改和Canva匯出。目前開放給Claude Pro、Max、Team和Enterprise訂閱用戶，免費版尚未開放。"
 faq:
   - question: "Claude Design怎麼用？"
-    answer: "進入Claude Design後，用文字描述你想要的設計：例如「製作一份美妝品牌聯名合作提案，受眾是25-35歲女性，風格偏簡約」。它會生成初稿，你可以直接在上面調整顏色、字型，完成後匯出PDF或PPTX，或推到Canva繼續編輯。"
+    answer: "前往claude.ai/design（需Pro/Max/Team/Enterprise訂閱），用文字描述你想要的設計：例如「製作一份美妝品牌聯名合作提案，受眾是25-35歲女性，風格偏簡約」。它會生成初稿，你可以直接在上面調整顏色、字型，完成後匯出PDF或PPTX，或推到Canva繼續編輯。"
   - question: "Claude Design和Canva有什麼差別？"
     answer: "Canva是從模板出發，你選模板再填內容。Claude Design是從你的文字描述出發，直接生成客製化的視覺初稿，不需要選模板。兩者可以搭配使用：Claude Design出初稿，Canva做細節調整。"
   - question: "沒有設計背景可以用Claude Design嗎？"
@@ -16,17 +16,17 @@ faq:
   - question: "自媒體做品牌合作提案，用Claude Design有什麼優勢？"
     answer: "主要是速度和視覺呈現。傳統方式需要自己用PPT排版或花錢找設計師，Claude Design可以在幾次對話內生成帶視覺的完整企劃書。對品牌端來說，收到有視覺的提案比純文字更容易進入評估流程。"
 howToSteps:
-  - name: "確認訂閱方案"
-    text: "Claude Design目前開放給Pro/Max/Team/Enterprise用戶。進入claude.ai確認你的方案，免費版用戶需要先升級Pro（每月20美元）才能使用。"
+  - name: "確認訂閱方案並進入工具"
+    text: "前往claude.ai/design，這是Claude Design的專屬入口。目前開放給Pro/Max/Team/Enterprise用戶，免費版用戶需先升級Pro（每月20美元）才能使用。"
   - name: "輸入提案核心資訊"
     text: "在Claude Design輸入：你的自媒體帳號主題、受眾輪廓（年齡/性別/興趣）、你想合作的品牌類型、希望呈現的視覺風格。描述越具體，初稿越接近你要的方向。"
   - name: "迭代後匯出傳送"
     text: "收到初稿後直接在介面上調整顏色、字型、版面，滿意後匯出PDF或PPTX，或推到Canva做最後細節，再傳給品牌的合作窗口。"
 ---
 
-Anthropic在2026年4月推出Claude Design，這是一個實驗性的AI視覺設計工具，輸入文字描述，它能生成App原型、簡報、品牌企劃書，支援即時修改，完成後可以匯出PDF、PPTX，或直接推到Canva繼續編輯。
+Anthropic在2026年4月推出Claude Design，這是一個實驗性的AI視覺設計工具，入口在claude.ai/design，輸入文字描述，它能生成App原型、簡報、品牌企劃書，支援即時修改，完成後可以匯出PDF、PPTX，或直接推到Canva繼續編輯。
 
-目前開放給Claude Pro、Max、Team和Enterprise訂閱用戶。
+目前開放給Claude Pro、Max、Team和Enterprise訂閱用戶，Enterprise需由管理員在設定中手動開啟。
 
 --
 
