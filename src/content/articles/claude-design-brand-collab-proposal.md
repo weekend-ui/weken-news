@@ -15,6 +15,8 @@ faq:
     answer: "不是。Claude Design目前是實驗性功能，開放給Claude Pro（每月20美元）、Max、Team和Enterprise訂閱用戶。免費版Claude帳號尚未開放。"
   - question: "自媒體做品牌合作提案，用Claude Design有什麼優勢？"
     answer: "主要是速度和視覺呈現。傳統方式需要自己用PPT排版或花錢找設計師，Claude Design可以在幾次對話內生成帶視覺的完整企劃書。對品牌端來說，收到有視覺的提案比純文字更容易進入評估流程。"
+  - question: "Claude Design匯出的檔案可以自己架站部署嗎？"
+    answer: "不建議。Claude Design的standalone HTML匯出格式會把所有資源打包成base64嵌入，單一檔案約15MB，在網路上載入很慢，這個格式是為了本地離線瀏覽設計的，不適合部署到公開網址。如果需要分享給品牌方，用Claude Design提供的分享URL（Anthropic代為託管）或匯出Canva繼續編輯，這兩種方式才是正常的分享流程。"
 howToSteps:
   - name: "確認訂閱方案並進入工具"
     text: "前往claude.ai/design，這是Claude Design的專屬入口。目前開放給Pro/Max/Team/Enterprise用戶，免費版用戶需先升級Pro（每月20美元）才能使用。"
@@ -67,3 +69,19 @@ Claude Design的設計定位是「讓沒有設計背景的人也能快速產出�
 對自媒體創作者來說，這個定位剛好對準了一個長期的痛點：內容做得好，但提案做不出質感。
 
 能不能完全解決這個問題，要實際用過才知道。但它把一個原本需要找設計師或花幾個小時排版才能做到的事，壓縮到幾次對話內，方向是對的。
+
+--
+
+補一個測試紀錄，供參考。
+
+Claude Design有一個「匯出standalone HTML」的選項，看起來像是可以部署成獨立網頁。實際測試結果：匯出的檔案大小約15MB，所有圖片、字型、樣式全部打包成base64嵌入在單一HTML裡，這個格式的設計初衷是本地離線瀏覽，不是放上網路給人開。
+
+部署到Vercel後，網頁載入速度慢到不實用。
+
+所以如果你的需求是「生成一份提案傳給品牌方」，正確的流程是：
+
+在Claude Design裡完成設計→用它提供的分享URL傳給對方（Anthropic會幫你託管），或是匯出到Canva再做最後調整→轉PDF傳過去。
+
+這兩條路都可行，自己架站不行。
+
+Claude Design是提案素材工具，不是網頁製作工具。用在對的地方，它做到的事情是值得的。
