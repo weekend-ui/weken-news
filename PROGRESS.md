@@ -84,6 +84,12 @@
 ### 2026-04-30 SEO 補強
 - [x] BaseLayout 加 Twitter / X Card meta（twitter:card / url / title / description / image），跟既有 og:image 共用 fallback。覆蓋分享到 Twitter 時的預覽（先前只有 og:* 對 LinkedIn / Facebook 有效，X 上會 fallback 成簡陋預覽）
 
+### 2026-05-02 文章擴充 + 第一隻 AI 爬蟲到訪
+- [x] 第二十八篇：gemini-transparent-png-three-class-diagnosis（Gemini 不出透明 PNG + AI 輸出三類分類法 + chroma key 解法）
+- [x] 第二十九篇：claude-analysis-vs-why-wrong-trigger（跟 Claude 工作的兩種模式：完整分析 vs 為什麼錯，Cat Wu 訪談啟發 + 實測對照）
+- [x] 第一隻 AI 爬蟲到訪：Apple 爬蟲打 /api/stats（2026-05-02 22:22 台灣時間）
+- [x] Google Search Console 開始有曝光：「npx skills」相關關鍵字 51 次曝光 2 次點擊（3 個月累積）
+
 ## 進行中
 
 - [ ] **DNS 沒生效（高優先）**：A record 之前加在 Namecheap Advanced DNS 但被 parking 機制覆蓋，nslookup weken.news 仍指向 198.54.117.242（Namecheap parking IP）。修法：Namecheap → weken.news → Manage → Nameservers 改成 Custom DNS：ns1.vercel-dns.com / ns2.vercel-dns.com，等 1-24h propagation。SSL 之後 Vercel 自動發。
