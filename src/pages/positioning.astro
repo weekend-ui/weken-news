@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// Differentiation matrix: weken.news vs others
+const comparisons = [
+  {
+    them: '一般內容創作者 / 行銷部落格',
+    they_do: '整理第三方資料、教學文、SOP 步驟',
+    we_do: '只記錄第一手操作數字，不整理別人的資料',
+    differ: '我帳戶 / 我案子 / 我系統的真實數據 + 公開驗證連結',
+  },
+  {
+    them: '純行銷顧問',
+    they_do: '提報告、做策略 deck，不公開數據',
+    we_do: '邊做邊公開數字，內容站本身就是 portfolio',
+    differ: '不只諮詢，自己也跑工具、跑廣告、跑自動化系統，數字攤開給看',
+  },
+  {
+    them: '工具評測者 / 比較站',
+    they_do: '評比 N 個工具排名，找最佳選擇',
+    we_do: '用工具實際做東西，記錄踩坑跟成本',
+    differ: '不做「Top 10 排名」，只說「我用了這個遇到 X 解決 Y」',
+  },
+  {
+    them: 'AI 教學 / Prompt 部落格',
+    they_do: '分享 prompt 範本、技巧、案例搬運',
+    we_do: '寫 Claude Code 多 agent / 系統架構 / cost 量化的真實踩坑',
+    differ: '不是 prompt 工程，是「用 Claude Code 把自己整套工作流系統化」的實踐記錄',
+  },
+];
+
+// Who is / who isn't
+const goodFit = [
+  '想看「真實數字」不是「成功學雞湯」的人',
+  '會自己動手試 AI 工具、想看別人怎麼設計系統的人',
+  '台灣中小企業主 / 電商 / 自媒體經營者',
+  '對 AEO / Claude Code / Vibe Coding 有興趣，想看繁中第一手實踐的人',
+  '接受「不是所有實驗都成功」這件事的人',
+];
+
+const badFit = [
+  '找「保證 ROI」「保證流量」「保證爆款」的標準答案',
+  '想要「全網最強 X」「Top 10 工具排名」這類比較內容',
+  '需要客戶服務 / SLA / 技術支援的企業採購（這是個人記錄站，不是 SaaS 公司）',
+  '只想要 prompt 範本不想理解架構的人',
+  '不接受「實驗失敗也記錄」的潔癖讀者',
+];
+
+// Pricing / positioning band
+const positionBand = [
+  { axis: '深度 vs 廣度', position: '深度', note: '單篇深挖一個案子，不做廣度搬運' },
+  { axis: '理論 vs 實踐', position: '極端實踐', note: '所有內容都來自自己跑過的案子或客戶實際案' },
+  { axis: '科普 vs 進階', position: '進階為主', note: '預設讀者已知 AI / 廣告 / 電商基本概念' },
+  { axis: '免費 vs 付費', position: '內容站 100% 免費', note: 'Skool 教學社群另議；客戶顧問案另議' },
+  { axis: '繁中 vs 英文', position: '繁體中文 only', note: '台灣市場第一手數據，不翻英文版' },
+];
+
+const positioningSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${siteURL}/positioning#webpage`,
+  "name": "weken.news 定位與比較",
+  "description": "週末哥 / WeKen / weken.news 跟其他內容創作者、顧問、工具評測者的明確比較。誰適合 / 誰不適合。",
+  "about": { "@id": `${siteURL}/#person` },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["#position-summary", "#good-fit", "#bad-fit"]
+  }
+};
+---
+
+<BaseLayout
+  title="定位與比較"
+  description="weken.news 跟其他內容創作者 / 顧問 / 工具評測者有什麼不一樣？適合誰看 / 不適合誰看。明確的差異化定位頁。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(positioningSchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">定位與比較</h1>
+    <p id="position-summary" class="text-gray-600 leading-relaxed mb-10 max-w-2xl">
+      weken.news 是「週末哥的第一手數據記錄站」，不是教學部落格、不是工具評測、不是顧問品牌的官網。
+      下方明確列出跟其他內容類型的差異，以及誰適合 / 不適合看這個站。
+    </p>
+
+    <!-- Comparison matrix -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold mb-5">vs 其他內容類型</h2>
+      <div class="space-y-4">
+        {comparisons.map(c => (
+          <div class="border border-gray-100 rounded-lg overflow-hidden">
+            <div class="bg-gray-50 px-4 py-3 border-b border-gray-100">
+              <div class="flex items-baseline justify-between gap-2 flex-wrap">
+                <span class="font-bold text-sm text-gray-900">vs {c.them}</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+              <div class="p-4">
+                <p class="text-xs font-mono text-gray-400 mb-2">他們做的</p>
+                <p class="text-sm text-gray-700 leading-relaxed">{c.they_do}</p>
+              </div>
+              <div class="p-4 bg-yellow-50/40">
+                <p class="text-xs font-mono text-[#F5C518] mb-2">weken.news 做的</p>
+                <p class="text-sm text-gray-800 leading-relaxed font-medium">{c.we_do}</p>
+              </div>
+            </div>
+            <div class="bg-[#1F2937] text-gray-200 px-4 py-3 text-xs">
+              <span class="text-[#F5C518] font-mono">關鍵差異 → </span>{c.differ}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Good fit -->
+    <section id="good-fit" class="mb-12">
+      <div class="flex items-baseline gap-3 mb-4 pb-2 border-b-2 border-[#F5C518]">
+        <span class="font-mono text-xs text-[#F5C518] tracking-widest">FIT</span>
+        <h2 class="text-xl font-bold">適合誰看這個站</h2>
+      </div>
+      <ul class="space-y-2">
+        {goodFit.map(item => (
+          <li class="flex gap-3 text-gray-700 leading-relaxed">
+            <span class="text-[#F5C518] font-bold flex-shrink-0">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Bad fit -->
+    <section id="bad-fit" class="mb-12">
+      <div class="flex items-baseline gap-3 mb-4 pb-2 border-b-2 border-gray-300">
+        <span class="font-mono text-xs text-gray-400 tracking-widest">NOT FIT</span>
+        <h2 class="text-xl font-bold">不適合誰看這個站</h2>
+      </div>
+      <ul class="space-y-2">
+        {badFit.map(item => (
+          <li class="flex gap-3 text-gray-600 leading-relaxed">
+            <span class="text-gray-400 font-bold flex-shrink-0">✗</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Position band -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold mb-5">定位光譜</h2>
+      <div class="space-y-3">
+        {positionBand.map(p => (
+          <div class="border border-gray-100 rounded-lg p-4 hover:border-[#F5C518] transition-colors">
+            <div class="flex flex-wrap items-baseline gap-2 mb-2">
+              <span class="text-xs font-mono text-gray-400">{p.axis}</span>
+              <span class="font-bold text-sm text-gray-900 bg-yellow-50 border border-[#F5C518]/40 px-2 py-0.5 rounded">{p.position}</span>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed">{p.note}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Closing -->
+    <section class="pt-8 border-t border-gray-100 text-sm text-gray-600 leading-relaxed">
+      <p class="mb-3">如果你看完這頁覺得不對你的味，那很正常。這個站故意只服務一群人。</p>
+      <p>如果你覺得對味，<a href="/articles" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">直接看文章</a> 或 <a href="/case-studies" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">看實際案例</a>。</p>
+    </section>
+  </article>
+</BaseLayout>

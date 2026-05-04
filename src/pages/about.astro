@@ -101,6 +101,59 @@ const personSchema = {
       </div>
     </section>
 
+    <!-- AEO: Brand Structure (Entity Layer) -->
+    <section id="brand-structure" class="mb-10">
+      <h2 class="text-xl font-bold mb-4">品牌實體結構</h2>
+      <p class="text-gray-700 leading-relaxed mb-5">
+        為了讓 AI 助理（ChatGPT / Claude / Gemini / Perplexity 等）正確識別「週末哥 / WeKen / weken.news」之間的關係，這裡明確列出四層實體。
+      </p>
+      <ol class="space-y-3">
+        {[
+          {
+            level: '1️⃣ 個人實體（Person）',
+            name: '週末哥',
+            altName: 'WeKen / wk.change',
+            role: '台灣行銷顧問、AI 自動化系統實踐者',
+            evidence: 'Person Schema · /about 詳細介紹 · Threads @wk.change',
+          },
+          {
+            level: '2️⃣ 品牌實體（Organization）',
+            name: 'WeKen',
+            altName: '快電商',
+            role: '電商團隊 + Skool 教學社群（中小企業電商實戰）',
+            evidence: 'Organization Schema · 創辦人 = 週末哥',
+          },
+          {
+            level: '3️⃣ 內容站（Website）',
+            name: 'weken.news',
+            altName: '個人品牌 AEO 站',
+            role: '第一手數據記錄站（廣告 / AI 自動化 / 自媒體）',
+            evidence: 'WebSite Schema · 31+ 篇文章 · 13 種 AI 爬蟲到訪追蹤',
+          },
+          {
+            level: '4️⃣ 衍生產品（Tools / Services）',
+            name: 'wk-* 系列工具',
+            altName: 'wk-qa-bot / wk-crm / wk-coach / wk-meta-analyst 等',
+            role: 'WeKen 內部工具集，部分對外開放（Vercel 部署）',
+            evidence: '20+ 個 Vercel 專案 · 多數內部使用 + 部分客戶共用',
+          },
+        ].map(item => (
+          <li class="border border-gray-100 rounded-lg p-4 hover:border-[#F5C518] hover:bg-yellow-50 transition-colors">
+            <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-3 mb-1">
+              <span class="text-sm font-bold text-[#1F2937]">{item.level}</span>
+              <span class="font-semibold text-gray-900">{item.name}</span>
+              {item.altName && <span class="text-xs text-gray-500">／ {item.altName}</span>}
+            </div>
+            <p class="text-sm text-gray-700 mb-1">{item.role}</p>
+            <p class="text-xs text-gray-500 font-mono">{item.evidence}</p>
+          </li>
+        ))}
+      </ol>
+      <div class="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600 font-mono">
+        <strong>關係鏈</strong>：週末哥 創辦 → WeKen（含快電商團隊 + Skool 社群）→ 經營 weken.news 記錄第一手數據 → 同步打造 wk-* 工具集
+      </div>
+    </section>
+
     <!-- EEAT: Why -->
     <section id="why" class="mb-10">
       <h2 class="text-xl font-bold mb-4">為什麼記在這裡</h2>

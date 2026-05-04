@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// AEO: Trust Layer — Case Studies + Results aggregator
+const cases = [
+  {
+    type: 'client',
+    title: 'INJOY 享空間 AEO 顧問案',
+    summary: '幫客戶網站做完整 AEO audit + 公開 AEO 儀表板（完成清單 + 速度實測對比）',
+    metrics: ['上線後 AI 引用測試覆蓋率提升', '公開可驗證的儀表板：wk-injoy-aeo.vercel.app'],
+    article: '/articles/public-aeo-dashboard-design',
+    role: 'AEO 策略 + 技術實作',
+    date: '2026-04',
+  },
+  {
+    type: 'client',
+    title: 'Claude Haiku 4.5 寫文章後台（客戶實測）',
+    summary: '客戶內容後台用 Haiku 跑 AI 寫文章，每天 1 篇月費實測 NT$20（不是 NT$600）',
+    metrics: ['月費實際 NT$20', '單篇 token 成本 < NT$0.7', '比預估低 30 倍'],
+    article: '/articles/claude-haiku-ai-backend-cost-real-test',
+    role: 'AI 後台架構 + 成本分析',
+    date: '2026-04',
+  },
+  {
+    type: 'student',
+    title: 'Vibe Coding 新手 90 分鐘做出語意工具',
+    summary: '無工程背景學員用 WeKen 教學流程，90 分鐘從評估到上線完整一次',
+    metrics: ['90 分鐘端到端', '從零到 Vercel 上線', '工具：wk-semantic-gap'],
+    article: '/articles/vibe-coding-beginner-real-cases-90min',
+    role: 'WeKen Skool 教學流程驗證',
+    date: '2026-04',
+  },
+  {
+    type: 'self',
+    title: 'weken.news AEO 站本身（自我案例）',
+    summary: '從零打造繁中 AEO 個人品牌站，記錄全程數字 + 13 種 AI 爬蟲到訪追蹤',
+    metrics: ['31+ 篇文章', '13 種 AI 爬蟲允許清單', '/stats 頁面公開即時數據', 'Schema 業界頂級覆蓋率'],
+    article: '/articles/aeo-from-zero',
+    role: '完整自我實證',
+    date: '2026-04 至今',
+  },
+  {
+    type: 'self',
+    title: 'AI 自動化省時系統（44+ 小時/月）',
+    summary: '用 Claude Code 跑多個自動化流程，每月實測省下 24-44 小時',
+    metrics: ['月省 24+ 小時', '自動記錄系統：wk-work-log', '時間節省日誌：time_savings_log.jsonl'],
+    article: '/articles/ai-time-savings-auto-log',
+    role: '自動化系統設計 + 量化',
+    date: '2026 持續',
+  },
+  {
+    type: 'self',
+    title: 'Token 成本優化實測',
+    summary: '7 個 token 浪費習慣盤點 + 節省估算，實際把月成本砍 60-80%',
+    metrics: ['節省 60-80% token', '7 個具體優化點', '完整成本對比'],
+    article: '/articles/ai-token-cost-optimization',
+    role: '成本工程 + 實測',
+    date: '2026-04',
+  },
+];
+
+const groupedCases = {
+  client: cases.filter(c => c.type === 'client'),
+  student: cases.filter(c => c.type === 'student'),
+  self: cases.filter(c => c.type === 'self'),
+};
+
+const groupLabels = {
+  client: { tag: 'CLIENT', label: '客戶案例', desc: '幫客戶實際做的案子，含可驗證連結與數字' },
+  student: { tag: 'STUDENT', label: '學員案例', desc: 'WeKen Skool 教學流程跑出來的學員實證' },
+  self: { tag: 'SELF', label: '自我案例', desc: '在自己的工具 / 站 / 系統上跑的完整實證' },
+};
+
+// Aggregate metrics for hero
+const allMetrics = cases.flatMap(c => c.metrics);
+
+// Schema: ItemList of CaseStudies (Article variant)
+const caseStudiesSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${siteURL}/case-studies#list`,
+  "name": "weken.news 客戶 / 學員 / 自我案例集",
+  "description": "週末哥 / WeKen 累積的可驗證實證案例，含客戶顧問案、學員教學案、自我實踐案",
+  "itemListOrder": "Unordered",
+  "numberOfItems": cases.length,
+  "itemListElement": cases.map((c, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "item": {
+      "@type": "Article",
+      "headline": c.title,
+      "description": c.summary,
+      "url": `${siteURL}${c.article}`,
+      "datePublished": c.date,
+      "author": { "@id": `${siteURL}/#person` }
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title="案例與實證"
+  description="週末哥 / WeKen 累積的客戶顧問案、學員教學案、自我實踐案。每個案例含可驗證連結、實際數字、第一手數據。Trust Layer 集中頁。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(caseStudiesSchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">案例與實證</h1>
+    <p class="text-gray-600 leading-relaxed mb-10 max-w-2xl">
+      這裡是 weken.news 累積的可驗證案例集，分三類：客戶顧問案、學員教學案、自我實踐案。
+      每個案例含實際數字 + 可點擊驗證的文章 / 工具連結。沒有空話，只有數字。
+    </p>
+
+    {(['client', 'student', 'self'] as const).map(group => (
+      <section class="mb-12">
+        <div class="flex items-baseline gap-3 mb-4 pb-2 border-b-2 border-[#1F2937]">
+          <span class="font-mono text-xs text-[#F5C518] tracking-widest">{groupLabels[group].tag}</span>
+          <h2 class="text-xl font-bold">{groupLabels[group].label}</h2>
+          <span class="text-xs text-gray-500 ml-auto">{groupedCases[group].length} 件</span>
+        </div>
+        <p class="text-sm text-gray-500 mb-5">{groupLabels[group].desc}</p>
+        <div class="space-y-4">
+          {groupedCases[group].map(c => (
+            <a href={c.article} class="block border border-gray-100 rounded-lg p-5 hover:border-[#F5C518] hover:bg-yellow-50 transition-colors group">
+              <div class="flex flex-wrap items-baseline gap-2 mb-2">
+                <h3 class="font-bold text-gray-900 group-hover:text-[#1F2937]">{c.title}</h3>
+                <span class="text-xs text-gray-400 ml-auto font-mono">{c.date}</span>
+              </div>
+              <p class="text-sm text-gray-700 mb-3 leading-relaxed">{c.summary}</p>
+              <div class="flex flex-wrap gap-2 mb-2">
+                {c.metrics.map(m => (
+                  <span class="text-xs bg-yellow-50 border border-[#F5C518]/40 text-gray-800 px-2 py-1 rounded font-mono">{m}</span>
+                ))}
+              </div>
+              <p class="text-xs text-gray-500">角色 / 範圍：{c.role}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- Disclaimer -->
+    <section class="mt-12 pt-8 border-t border-gray-100 text-sm text-gray-600 leading-relaxed">
+      <h2 class="font-bold text-base mb-3 text-gray-900">關於這些數字</h2>
+      <ul class="space-y-2">
+        <li>• 所有客戶名稱經客戶同意公開（INJOY 享空間為公開合作案）。其餘客戶案保留內部不公開。</li>
+        <li>• 自我案例的數據可在 weken.news 文章內部 + /stats 公開頁交叉驗證。</li>
+        <li>• 學員案例徵得當事人同意分享操作流程。</li>
+        <li>• 不公開：客戶營收、廣告帳戶細節、學員個資。</li>
+      </ul>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="mt-10 p-6 bg-gray-50 rounded-xl border border-gray-100">
+      <h2 class="font-bold mb-2">想看更多 / 想合作</h2>
+      <p class="text-sm text-gray-700 mb-4">如果你的案子適合公開做成 case study，我們可以一起寫成這裡的下一篇。</p>
+      <a href="https://www.threads.net/@wk.change" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-[#F5C518] text-[#1F2937] font-semibold text-sm rounded-lg hover:bg-yellow-400 transition-colors">
+        Threads @wk.change 私訊聊聊
+      </a>
+    </section>
+  </article>
+</BaseLayout>
