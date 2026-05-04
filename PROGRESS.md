@@ -1,5 +1,7 @@
 # weken.news — PROGRESS
 
+> 最後更新：2026-05-04｜階段：6 層 AEO audit 完成 + 5 milestone 全套補洞上線（Brand Structure / case-studies / positioning / scenarios / 5 topic pillar pages）
+
 ## 專案概要
 週末哥個人品牌 AEO 站，記錄第一手數據（廣告/自媒體/AI自動化），建立 AI 引用權威。
 技術：Astro + Vercel | 域名：weken.news（Namecheap）
