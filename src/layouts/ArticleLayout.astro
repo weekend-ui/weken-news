@@ -12,7 +12,7 @@ const { title, description, pubDate, updatedDate, tags, directAnswer, faq, howTo
 const siteURL = 'https://weken.news';
 const canonicalURL = `${siteURL}/articles/${article.slug}`;
 
-// AEO: Article Schema
+// AEO: Article Schema with explicit isAuthor / isPublisher relationships
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -24,17 +24,33 @@ const articleSchema = {
   "author": {
     "@type": "Person",
     "@id": `${siteURL}/#person`,
-    "name": "週末哥"
+    "name": "週末哥",
+    "url": `${siteURL}/about`
   },
   "publisher": {
     "@type": "Organization",
     "@id": `${siteURL}/#organization`,
-    "name": "WeKen"
+    "name": "WeKen",
+    "url": siteURL,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${siteURL}/logo.png`,
+      "width": 512,
+      "height": 512
+    }
+  },
+  "image": {
+    "@type": "ImageObject",
+    "url": `${siteURL}/og-default.png`,
+    "width": 1200,
+    "height": 630
   },
   "mainEntityOfPage": { "@id": `${canonicalURL}#webpage` },
   "inLanguage": "zh-TW",
   "keywords": tags.join(', '),
-  "url": canonicalURL
+  "articleSection": tags[0] || "AEO",
+  "url": canonicalURL,
+  "isAccessibleForFree": true
 };
 
 // AEO: FAQ Schema
@@ -177,14 +193,30 @@ const breadcrumbSchema = {
       </section>
     )}
 
-    <!-- Author signature -->
-    <div class="mt-12 pt-8 border-t border-gray-100 flex items-start gap-4">
-      <div>
-        <p class="font-semibold text-gray-800">週末哥</p>
-        <p class="text-sm text-gray-500 mt-1">WeKen 創辦人 x 行銷顧問 × Meta廣告 x Google Ads x AI 自動化 × 快電商</p>
-        <a href="https://www.threads.net/@wk.change" target="_blank" rel="noopener noreferrer"
-           class="text-sm text-[#F5C518] hover:underline mt-1 inline-block">Threads @wk.change</a>
+    <!-- Author Bio Block (N.E.E.A.T.T 訊號 + Person ↔ Article 關聯強化) -->
+    <aside class="mt-12 pt-8 border-t border-gray-100" aria-label="作者資訊">
+      <div class="bg-gray-50 rounded-lg p-5 border border-gray-100">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-12 h-12 rounded-full bg-[#1F2937] flex items-center justify-center flex-shrink-0">
+            <span class="text-[#F5C518] font-bold text-xl">wk</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">
+              <a href="/about#who" class="hover:text-[#F5C518]">週末哥</a>
+            </p>
+            <p class="text-xs text-gray-500 mt-1">WeKen 創辦人 · 行銷顧問 · weken.news 站長</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed mb-3">
+          台灣行銷顧問，WeKen 快電商團隊創辦人。本站記錄 AEO 建站、Claude Code 工作流、廣告投放、AI 工具實作的第一手數據。所有內容來自親身操作。
+        </p>
+        <div class="flex flex-wrap gap-3 text-xs text-gray-500">
+          <a href="/about" class="hover:text-[#F5C518]">→ 完整介紹</a>
+          <a href="/case-studies" class="hover:text-[#F5C518]">→ 實證案例</a>
+          <a href="/positioning" class="hover:text-[#F5C518]">→ 與其他人差異</a>
+          <a href="https://www.threads.net/@wk.change" target="_blank" rel="noopener noreferrer" class="hover:text-[#F5C518]">→ Threads @wk.change</a>
+        </div>
       </div>
-    </div>
+    </aside>
   </article>
 </BaseLayout>

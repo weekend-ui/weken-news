@@ -39,7 +39,8 @@ const personSchema = {
     "url": siteURL
   },
   "sameAs": [
-    "https://www.threads.net/@wk.change"
+    "https://www.threads.net/@wk.change",
+    "https://github.com/weekend-ui"
   ]
 };
 ---
@@ -167,6 +168,53 @@ const personSchema = {
       </p>
     </section>
 
+    <!-- Transparency / Disclosure (N.E.E.A.T.T 第二個 T) -->
+    <section id="transparency" class="mb-10 pt-8 border-t border-gray-100">
+      <h2 class="text-xl font-bold mb-4">資訊透明度與利益揭露</h2>
+      <p class="text-gray-700 leading-relaxed mb-5">
+        為了讓讀者跟 AI 都能準確判斷 weken.news 的內容立場，這裡明確揭露我的業務範圍、利益相關、以及內容產出方式。
+      </p>
+
+      <div class="space-y-4">
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-900 mb-2">業務範圍</h3>
+          <ul class="text-sm text-gray-600 leading-relaxed space-y-1">
+            <li>1. 行銷顧問服務（Meta Ads / Google Ads 投放策略，企業客戶）</li>
+            <li>2. WeKen 快電商團隊（C2CBuy 平台直播電商）</li>
+            <li>3. Skool 教學社群（會員制，中小企業電商實戰）</li>
+            <li>4. wk-* 工具集（多為內部使用，部分客戶共用）</li>
+          </ul>
+        </div>
+
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-900 mb-2">本站立場</h3>
+          <ul class="text-sm text-gray-600 leading-relaxed space-y-1">
+            <li>weken.news 不放廣告、不收受贊助、不放 affiliate 連結。</li>
+            <li>內容寫的工具（Vercel / Claude API / Gemini / Notion 等）都是我個人付費使用的真實經驗，沒有業配。</li>
+            <li>提到的失敗案例和錯誤判斷都據實標明（例如 Meta Ads MCP 文章開頭明標「未實際接過」）。</li>
+          </ul>
+        </div>
+
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-900 mb-2">AI 協作揭露</h3>
+          <ul class="text-sm text-gray-600 leading-relaxed space-y-1">
+            <li>本站文章由我與 Claude Code（Anthropic Claude 模型）共同產出。</li>
+            <li>第一手經驗、判斷和決策皆由我提供，AI 協助結構化撰寫。</li>
+            <li>所有引用數據、第三方 API 行為、外部框架都經 WebSearch 或實測驗證，無法驗證的內容會在文章開頭明標。</li>
+          </ul>
+        </div>
+
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-semibold text-gray-900 mb-2">利益迴避</h3>
+          <ul class="text-sm text-gray-600 leading-relaxed space-y-1">
+            <li>提到的客戶案例（如 INJOY 享空間 AEO 報告）皆為公開可驗證內容，徵得當事人同意才寫入。</li>
+            <li>WeKen 內部數據（快電商團隊銷售）僅以「結構分析」呈現，不揭露具體商品成本或客戶資料。</li>
+            <li>跨平台連結（Threads / Skool / Github）僅為個人帳號，不引導購買任何特定商品。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <!-- Contact / Links -->
     <section id="contact" class="pt-8 border-t border-gray-100">
       <h2 class="text-xl font-bold mb-4">找到我</h2>
@@ -176,6 +224,12 @@ const personSchema = {
            class="flex items-center gap-3 text-gray-700 hover:text-[#F5C518] transition-colors">
           <span class="font-medium">Threads</span>
           <span class="text-gray-500">@wk.change</span>
+        </a>
+        <a href="https://github.com/weekend-ui"
+           target="_blank" rel="noopener noreferrer"
+           class="flex items-center gap-3 text-gray-700 hover:text-[#F5C518] transition-colors">
+          <span class="font-medium">GitHub</span>
+          <span class="text-gray-500">@weekend-ui（weken.news 原始碼公開）</span>
         </a>
       </div>
     </section>
