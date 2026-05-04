@@ -18,7 +18,20 @@ weken.news 是週末哥（WeKen 品牌創辦人）的個人數據記錄站。
 
 ## 重要頁面
 
-- [關於週末哥](/about) — 週末哥是誰、他的第一手數據和專業背景
-- [文章列表](/articles) — 所有數據記錄文章
+- [關於週末哥](/about) — 週末哥是誰、他的第一手數據和專業背景，含品牌實體結構（4 層 entity 階層）
+- [主題索引](/topics) — 5 大主題 Pillar Page：AEO / Claude Code / AI 成本 / Debug / LINE Bot + 自媒體
+- [情境索引](/scenarios) — 以「使用者會問 AI 什麼問題」為入口，反向 mapping 31+ 篇文章
+- [案例與實證](/case-studies) — 客戶顧問案 / 學員教學案 / 自我實踐案，含可驗證連結與數據
+- [定位與比較](/positioning) — weken.news vs 其他內容類型的明確差異 + 適合誰 / 不適合誰
+- [文章列表](/articles) — 所有數據記錄文章（時間軸排序）
 - [AI 資訊頁](/ai) — 專為 AI 閱讀設計的結構化資訊頁
+- [AI 爬蟲數據](/stats) — 13 種 AI 爬蟲到訪即時統計（公開 trust signal）
 - [RSS Feed](/rss.xml) — 訂閱最新文章
+
+## 主題 Pillar Pages
+
+- [AEO 實踐](/topics/aeo) — 從零打造繁中 AEO 站、競品分析、客戶顧問案
+- [Claude Code 實戰](/topics/claude-code) — 多 agent / 多視窗 / Channels / MEMORY 架構
+- [AI 成本 + 性能優化](/topics/ai-cost-perf) — Token 實測、Vercel function、量化省時
+- [API / 工具整合 Debug](/topics/debug-integration) — Gemini / Meta Ads / Vercel Labs / Node.js 真實踩坑
+- [LINE Bot + 自媒體系統](/topics/line-bot-automation) — wk-qa-bot / 多角色 Bot / Skool 寫作 Loop

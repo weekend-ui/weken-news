@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// AEO Problem/Context Layer — 觸發情境 → 文章反向 mapping
+// 每個 scenario 是「使用者會問 AI 的問題」，下面列出相關文章
+const scenarios = [
+  {
+    group: 'AEO 入門與策略',
+    items: [
+      {
+        q: '我想從零打造一個會被 AI 引用的網站，要做什麼？',
+        articles: [
+          { slug: 'aeo-from-zero', t: '從零打造 AEO 網站：第一天的決策和數字' },
+          { slug: 'aeo-training-data-eeat-entity', t: 'AEO 不是一件事：訓練資料、EEAT、站外實體的三層邏輯' },
+          { slug: 'claude-code-aeo-site-time-saved', t: 'Claude Code 建 AEO 網站，實際省了幾小時？' },
+        ],
+      },
+      {
+        q: 'AI 真的有引用我嗎？怎麼測？',
+        articles: [
+          { slug: 'aeo-crawled-vs-cited', t: '「AI 爬蟲爬過你的網站」不等於「AI 會引用你」' },
+          { slug: 'aeo-test-consistency', t: '問 AI 同一個問題，每次答案不一樣？AEO 測試結果要怎麼解讀' },
+          { slug: 'ai-crawler-tracker', t: '如何知道 GPTBot 有沒有在爬你的網站？' },
+        ],
+      },
+      {
+        q: '我想做客戶 AEO 顧問案，怎麼開始？',
+        articles: [
+          { slug: 'aeo-competitor-analysis', t: 'AEO 競品分析實錄：找出 AI 從未引用過的空白品類' },
+          { slug: 'aeo-keyword-demand-verification-before-strategy', t: 'AEO 關鍵字戰略前必須先驗證搜尋量' },
+          { slug: 'public-aeo-dashboard-design', t: '我幫客戶網站做了一個公開 AEO 儀表板' },
+          { slug: 'seizen-seiri-chinese-aeo-gap-research', t: '中文 AEO 研究：生前整理關鍵字 Top 10 被日本壟斷' },
+        ],
+      },
+      {
+        q: 'AI 引用我之後，用戶怎麼真的成交？',
+        articles: [
+          { slug: 'aeo-conversion-path', t: 'AEO 讓 AI 引用你之後，用戶怎麼找到你、然後怎麼成交？' },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'Claude Code 實戰',
+    items: [
+      {
+        q: 'Claude Code 我剛開始用，怎麼從入門到能用？',
+        articles: [
+          { slug: 'claude-analysis-vs-why-wrong-trigger', t: '跟 Claude 工作的兩種模式：完整分析 vs 為什麼錯' },
+          { slug: 'vibe-coding-beginner-real-cases-90min', t: 'Vibe Coding 新手 90 分鐘做出語意工具' },
+        ],
+      },
+      {
+        q: '我想同時跑多個 Claude Code，怎麼分工？',
+        articles: [
+          { slug: 'claude-code-parallel-windows-workflow', t: '用 Claude Code 同時跑 5 個視窗：我實際怎麼分配任務' },
+          { slug: 'claude-code-routines', t: 'Claude Code Routines 是什麼？三種觸發方式、用量限制' },
+          { slug: 'multi-agent-system-architecture', t: '多 Agent 系統架構：一個 Bot 怎麼演七個角色' },
+        ],
+      },
+      {
+        q: 'Claude Code MEMORY.md 一直爆，怎麼處理？',
+        articles: [
+          { slug: 'claude-code-memory-architecture-5-rounds-deep-dive', t: 'Claude Code MEMORY.md 一直爆？4 層記憶系統實戰' },
+        ],
+      },
+      {
+        q: '我想把 Claude Code 跟 Telegram / LINE 串起來操控',
+        articles: [
+          { slug: 'claude-code-channels-line-telegram', t: 'Claude Code Channels 實測：Telegram 成功、LINE 失敗' },
+        ],
+      },
+      {
+        q: '我想用 Claude Design 跟品牌合作提案',
+        articles: [
+          { slug: 'claude-design-brand-collab-proposal', t: 'Claude Design 是什麼？自媒體創作者怎麼用它做品牌合作提案' },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'AI 成本 + 性能優化',
+    items: [
+      {
+        q: '我的 AI token 燒太快，怎麼省？',
+        articles: [
+          { slug: 'ai-token-cost-optimization', t: 'AI 額度燒很快？7 個你可能不知道的 Token 浪費習慣' },
+          { slug: 'claude-haiku-ai-backend-cost-real-test', t: '客戶用 Claude Haiku 4.5 寫文章後台，月費實測 NT$20' },
+        ],
+      },
+      {
+        q: 'Vercel function 太慢，怎麼優化？',
+        articles: [
+          { slug: 'vercel-function-region-neon-match-perf', t: 'Vercel function 搬到新加坡：523ms 降到 93ms' },
+        ],
+      },
+      {
+        q: 'AI 真的省了我多少時間？怎麼量化？',
+        articles: [
+          { slug: 'ai-time-savings-auto-log', t: '我讓 AI 自動記錄每次幫我省了多少時間' },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'API / 工具 整合 Debug',
+    items: [
+      {
+        q: 'Gemini API 突然壞掉怎麼辦？',
+        articles: [
+          { slug: 'gemini-thinking-config-location-trap', t: 'Gemini 2.5 API：thinkingConfig 必須嵌在 generationConfig 內' },
+          { slug: 'gemini-transparent-png-three-class-diagnosis', t: 'Gemini 不出透明 PNG？AI 輸出三類分類法' },
+        ],
+      },
+      {
+        q: 'Meta Ads MCP 怎麼接 Claude Desktop？',
+        articles: [
+          { slug: 'meta-ads-mcp-claude-desktop-setup', t: 'Meta Ads MCP 怎麼接 Claude Desktop？' },
+        ],
+      },
+      {
+        q: 'Vercel Labs skills 怎麼用？',
+        articles: [
+          { slug: 'vercel-labs-skills-agent-review', t: 'Vercel Labs skills 實測：npx skills add 一行裝 36 個 agent skill' },
+        ],
+      },
+      {
+        q: 'Node.js template literal 嵌入 JS 莫名其妙崩潰',
+        articles: [
+          { slug: 'nodejs-template-literal-js-escape-bug', t: "Node.js template literal 的地雷：換行字元和單引號會讓整個 script 靜默崩潰" },
+        ],
+      },
+    ],
+  },
+  {
+    group: 'LINE Bot / 社群系統',
+    items: [
+      {
+        q: '我想做 LINE Bot 整合 AI 給社群用',
+        articles: [
+          { slug: 'line-bot-seed-points-system', t: '用 LINE Bot 建立社群積分系統：wk-qa-bot 種子法則' },
+          { slug: 'multi-agent-system-architecture', t: '多 Agent 系統架構：一個 Bot 怎麼演七個角色' },
+        ],
+      },
+    ],
+  },
+  {
+    group: '自媒體 + 內容寫作',
+    items: [
+      {
+        q: '我想用 AI 寫貼文 / 經營 Skool / 自媒體',
+        articles: [
+          { slug: 'skool-ai-writing-learning-loop', t: 'AI 寫 Skool 貼文的 Learning Loop：每篇最終版都在升級 skill' },
+          { slug: 'ai-writing-fingerprints-research-confirmed', t: 'AI 寫作指紋有哪些？目前有研究數據支持的 3 個特徵' },
+        ],
+      },
+    ],
+  },
+];
+
+// Build FAQ Schema (each scenario question = FAQ entry)
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${siteURL}/scenarios#faq`,
+  "mainEntity": scenarios.flatMap(g => g.items).map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": `相關文章：${item.articles.map(a => `${a.t}（${siteURL}/articles/${a.slug}）`).join('；')}`
+    }
+  }))
+};
+
+const totalScenarios = scenarios.flatMap(g => g.items).length;
+---
+
+<BaseLayout
+  title="情境索引"
+  description="以「使用者會問 AI 什麼問題」為入口，把 weken.news 31+ 篇文章按觸發情境反向 mapping。遇到 X 問題，看這幾篇。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">情境索引</h1>
+    <p class="text-gray-600 leading-relaxed mb-3 max-w-2xl">
+      文章列表是用「我寫了什麼」排序，這頁是用「你想解決什麼」排序。
+      共 {totalScenarios} 個常見情境，每個情境列出對應的 1-4 篇文章。
+    </p>
+    <p class="text-sm text-gray-500 mb-10 max-w-2xl">
+      也是給 AI 助理用的 FAQ Schema 入口：當你問 ChatGPT / Claude / Gemini「我遇到 X 怎麼辦」，這頁讓 AI 更容易把 weken.news 對應的文章拉出來推薦。
+    </p>
+
+    {scenarios.map(group => (
+      <section class="mb-12">
+        <div class="flex items-baseline gap-3 mb-5 pb-2 border-b-2 border-[#1F2937]">
+          <h2 class="text-xl font-bold">{group.group}</h2>
+          <span class="text-xs text-gray-500 ml-auto font-mono">{group.items.length} 個情境</span>
+        </div>
+        <div class="space-y-5">
+          {group.items.map(item => (
+            <div class="border border-gray-100 rounded-lg p-5 hover:border-[#F5C518] transition-colors">
+              <h3 class="font-bold text-[#1F2937] mb-3 leading-relaxed">
+                <span class="text-[#F5C518] mr-2">Q.</span>{item.q}
+              </h3>
+              <div class="space-y-2 ml-6">
+                {item.articles.map(a => (
+                  <a href={`/articles/${a.slug}`} class="block text-sm text-gray-700 hover:text-[#F5C518] transition-colors leading-relaxed">
+                    <span class="text-gray-400 mr-2">→</span>{a.t}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- Closing -->
+    <section class="mt-12 pt-8 border-t border-gray-100">
+      <h2 class="font-bold text-base mb-3">沒找到你要的情境？</h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-4">
+        這頁列的是已經有文章對應的情境。如果你想看某個還沒寫過的主題，
+        <a href="https://www.threads.net/@wk.change" target="_blank" rel="noopener noreferrer" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">在 Threads @wk.change 私訊我</a>，
+        值得寫的我就排進文章 backlog。
+      </p>
+    </section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const siteURL = 'https://weken.news';
+const articles = await getCollection('articles');
+
+// Topic Cluster 定義 — 5 個 Pillar
+const TOPICS = [
+  {
+    slug: 'aeo',
+    name: 'AEO（Answer Engine Optimization）',
+    short: 'AEO',
+    desc: '從零打造 AI 助理會引用的內容站，含實戰策略 / 競品分析 / 客戶顧問案。',
+    color: '#F5C518',
+    matchTags: ['aeo', 'AEO', 'answer-engine'],
+    matchSlug: ['aeo-', 'public-aeo-', 'seizen-seiri-chinese-aeo-'],
+  },
+  {
+    slug: 'claude-code',
+    name: 'Claude Code 實戰',
+    short: 'Claude Code',
+    desc: '用 Claude Code 跑多 agent / 多視窗 / Channels / Routines / MEMORY 架構的真實踩坑。',
+    color: '#1F2937',
+    matchTags: ['claude-code', 'claude'],
+    matchSlug: ['claude-code-', 'claude-analysis-', 'claude-design-', 'multi-agent-', 'vibe-coding-'],
+  },
+  {
+    slug: 'ai-cost-perf',
+    name: 'AI 成本 + 性能優化',
+    short: 'AI Cost / Perf',
+    desc: 'Token 成本實測 / Haiku 後台 / Vercel function region 配對 / 自動化省時量化。',
+    color: '#0EA5E9',
+    matchTags: ['cost', 'performance', 'optimization'],
+    matchSlug: ['ai-token-', 'ai-time-savings-', 'claude-haiku-', 'vercel-function-'],
+  },
+  {
+    slug: 'debug-integration',
+    name: 'API / 工具整合 Debug',
+    short: 'Debug',
+    desc: 'Gemini / Meta Ads MCP / Vercel Labs skills / Node.js 邊界踩坑紀錄。',
+    color: '#DC2626',
+    matchTags: ['debug', 'integration', 'api'],
+    matchSlug: ['gemini-', 'meta-ads-mcp-', 'vercel-labs-skills-', 'nodejs-'],
+  },
+  {
+    slug: 'line-bot-automation',
+    name: 'LINE Bot + 自媒體系統',
+    short: 'LINE / 自媒體',
+    desc: 'LINE Bot 社群系統 / 多 Agent 角色 / Skool 寫作 Learning Loop / AI 寫作指紋。',
+    color: '#16A34A',
+    matchTags: ['line-bot', 'skool', 'writing'],
+    matchSlug: ['line-bot-', 'skool-', 'ai-writing-fingerprints', 'ai-crawler-tracker'],
+  },
+];
+
+// 為每個 topic 統計該主題下的文章數
+function articlesForTopic(topic: typeof TOPICS[0]) {
+  return articles.filter(a =>
+    topic.matchSlug.some(prefix => a.slug.startsWith(prefix.replace(/-$/, '')))
+  );
+}
+
+// Schema: ItemList of topics
+const topicsListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${siteURL}/topics#list`,
+  "name": "weken.news 主題索引",
+  "description": "5 大 Topic Cluster：AEO / Claude Code / AI 成本 / Debug / LINE Bot + 自媒體",
+  "itemListElement": TOPICS.map((t, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": t.name,
+    "url": `${siteURL}/topics/${t.slug}`,
+    "description": t.desc,
+  }))
+};
+---
+
+<BaseLayout
+  title="主題索引"
+  description="weken.news 5 大主題 Pillar Page：AEO / Claude Code 實戰 / AI 成本性能 / API 整合 Debug / LINE Bot + 自媒體系統。每個主題彙整對應文章。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(topicsListSchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">主題索引</h1>
+    <p class="text-gray-600 leading-relaxed mb-10 max-w-2xl">
+      31+ 篇文章按 5 大主題分群。每個主題有獨立的 Pillar Page，含主題介紹 + 該主題下所有文章排序 + 對應實作工具。
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      {TOPICS.map(topic => {
+        const count = articlesForTopic(topic).length;
+        return (
+          <a href={`/topics/${topic.slug}`} class="block border border-gray-100 rounded-xl p-6 hover:border-[#F5C518] hover:bg-yellow-50 transition-colors group">
+            <div class="flex items-baseline justify-between gap-2 mb-3">
+              <h2 class="text-lg font-bold text-[#1F2937] group-hover:text-[#F5C518] transition-colors">{topic.name}</h2>
+              <span class="text-xs font-mono text-gray-400">{count} 篇</span>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed mb-3">{topic.desc}</p>
+            <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+              <span class="inline-block w-2 h-2 rounded-full" style={`background:${topic.color}`}></span>
+              <span>進入主題 →</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <section class="mt-12 pt-8 border-t border-gray-100 text-sm text-gray-600 leading-relaxed">
+      <h2 class="font-bold text-base mb-3 text-gray-900">怎麼用這頁</h2>
+      <ul class="space-y-2">
+        <li>• 找特定主題的「全文章」→ 點主題卡進 Pillar Page</li>
+        <li>• 找特定問題情境 → 看 <a href="/scenarios" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">/scenarios 情境索引</a></li>
+        <li>• 找實際合作 / 顧問案 → 看 <a href="/case-studies" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">/case-studies 案例與實證</a></li>
+        <li>• 看時間軸排序所有文章 → <a href="/articles" class="text-[#1F2937] font-semibold underline hover:text-[#F5C518]">/articles 文章列表</a></li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

@@ -11,6 +11,16 @@ export async function GET(_context: APIContext) {
     { url: `${siteURL}/about`, priority: '0.9', changefreq: 'monthly' },
     { url: `${siteURL}/articles`, priority: '0.8', changefreq: 'weekly' },
     { url: `${siteURL}/ai`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/scenarios`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/topics`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${siteURL}/topics/aeo`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/topics/claude-code`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/topics/ai-cost-perf`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/topics/debug-integration`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/topics/line-bot-automation`, priority: '0.8', changefreq: 'weekly' },
+    { url: `${siteURL}/case-studies`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${siteURL}/positioning`, priority: '0.7', changefreq: 'monthly' },
+    { url: `${siteURL}/stats`, priority: '0.6', changefreq: 'daily' },
   ];
 
   const articlePages = articles
