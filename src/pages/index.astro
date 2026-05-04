@@ -2,9 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const articles = (await getCollection('articles'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 5);
+const allArticles = (await getCollection('articles'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const articles = allArticles.slice(0, 5);
+
+// TrustIndicator stats
+const totalArticles = allArticles.length;
+const earliestArticle = allArticles[allArticles.length - 1]?.data.pubDate;
+const daysActive = earliestArticle
+  ? Math.ceil((Date.now() - earliestArticle.valueOf()) / (1000 * 60 * 60 * 24))
+  : 0;
+const totalFAQs = allArticles.reduce((sum, a) => sum + (a.data.faq?.length || 0), 0);
+const totalHowTos = allArticles.reduce((sum, a) => sum + (a.data.howToSteps?.length || 0), 0);
 ---
 
 <BaseLayout
@@ -28,6 +37,36 @@ const articles = (await getCollection('articles'))
       <a href="/about" class="px-4 py-2 border border-[#1F2937] text-[#1F2937] text-sm rounded-lg hover:bg-gray-50 transition-colors active:bg-gray-100">
         關於週末哥
       </a>
+    </div>
+  </section>
+
+  <!-- TrustIndicator (N.E.E.A.T.T 訊號量化) -->
+  <section class="mb-12 bg-gray-50 border border-gray-100 rounded-xl p-5" aria-label="本站數據">
+    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">本站數據</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div>
+        <p class="text-2xl font-bold text-[#1F2937]">{totalArticles}</p>
+        <p class="text-xs text-gray-500 mt-1">第一手文章</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-[#1F2937]">{daysActive}</p>
+        <p class="text-xs text-gray-500 mt-1">建站天數</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-[#1F2937]">{totalFAQs}</p>
+        <p class="text-xs text-gray-500 mt-1">FAQ 條目</p>
+      </div>
+      <div>
+        <p class="text-2xl font-bold text-[#1F2937]">{totalHowTos}</p>
+        <p class="text-xs text-gray-500 mt-1">操作步驟</p>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-3 text-xs text-gray-500 mt-4 pt-4 border-t border-gray-200">
+      <a href="/about" class="hover:text-[#F5C518]">→ 關於週末哥</a>
+      <a href="/case-studies" class="hover:text-[#F5C518]">→ 實證案例</a>
+      <a href="/positioning" class="hover:text-[#F5C518]">→ 定位差異</a>
+      <a href="/stats" class="hover:text-[#F5C518]">→ AI 爬蟲數據</a>
+      <a href="/ai" class="hover:text-[#F5C518]">→ AI 資訊頁</a>
     </div>
   </section>
 

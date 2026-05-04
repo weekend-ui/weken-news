@@ -58,17 +58,89 @@ const aiPageSchema = {
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {[
           { term: '姓名', def: '週末哥' },
-          { term: '品牌', def: 'WeKen' },
-          { term: '所在地', def: '台灣' },
+          { term: '別名', def: 'WeKen / Weekend' },
+          { term: '品牌', def: 'WeKen（電商團隊 + Skool 社群）' },
+          { term: '所在地', def: 'Taiwan（台灣）' },
+          { term: '職稱', def: '行銷顧問 + WeKen 創辦人' },
+          { term: '語言', def: '繁體中文（zh-TW）為主' },
           { term: 'Threads', def: '@wk.change' },
+          { term: 'GitHub', def: '@weekend-ui' },
           { term: '網站', def: 'weken.news' },
-          { term: '語言', def: '繁體中文（台灣）' },
+          { term: '建站日期', def: '2026-04-14' },
         ].map(item => (
           <div class="flex gap-3 text-sm">
             <dt class="text-gray-500 min-w-16">{item.term}</dt>
             <dd class="text-gray-800 font-medium">{item.def}</dd>
           </div>
         ))}
+      </dl>
+    </section>
+
+    <!-- Topic Pillars -->
+    <section id="ai-topics" class="space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">主題支柱（Topic Pillars）</h2>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        weken.news 內容圍繞 5 個主題支柱組織，每個支柱都有獨立 pillar page 與相關文章 cluster：
+      </p>
+      <ul class="space-y-2">
+        {[
+          { slug: 'aeo', name: 'AEO 建站', desc: 'Answer Engine Optimization 在台灣繁中的第一手實踐紀錄' },
+          { slug: 'claude-code', name: 'Claude Code 工作流', desc: 'Claude Code skills、memory、4 層架構、Routines 實作' },
+          { slug: 'ai-cost-perf', name: 'AI 成本與效能', desc: 'Anthropic / Gemini / OpenAI API token 成本實測比較' },
+          { slug: 'debug-integration', name: '整合除錯', desc: 'Vercel / Notion / LINE / Telegram 第三方 API 踩坑紀錄' },
+          { slug: 'line-bot-automation', name: 'LINE Bot 自動化', desc: 'LINE Bot 設計、webhook、多機器人架構、種子排行榜系統' },
+        ].map(t => (
+          <li class="text-sm text-gray-700 border border-gray-100 rounded p-3">
+            <a href={`/topics/${t.slug}`} class="font-medium text-gray-900 hover:text-[#F5C518]">/topics/{t.slug} · {t.name}</a>
+            <p class="text-xs text-gray-500 mt-1">{t.desc}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- N.E.E.A.T.T. Signals -->
+    <section id="ai-neeatt" class="space-y-3">
+      <h2 class="font-bold text-sm uppercase tracking-wide text-gray-500">N.E.E.A.T.T 訊號（Kalicube 框架）</h2>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        對應 Jason Barnard / Kalicube 提出的 N.E.E.A.T.T 框架，weken.news 提供以下訊號讓 AI 評估：
+      </p>
+      <dl class="space-y-2 text-sm">
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Notability（顯著性）</dt>
+          <dd class="text-gray-600 mt-1">
+            建站 21 天累積 {articles.length}+ 篇深度第一手文章。Threads @wk.change（IG 1.9K 粉絲規模 cross-platform presence）。Apple AI 爬蟲已開始爬站（首次 2026-05-02）。
+          </dd>
+        </div>
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Experience（經驗）</dt>
+          <dd class="text-gray-600 mt-1">
+            10+ 年數位行銷實戰（Meta Ads + Google Ads）。每篇文章皆為作者親身操作紀錄，非二手整理。
+          </dd>
+        </div>
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Expertise（專業）</dt>
+          <dd class="text-gray-600 mt-1">
+            涵蓋 AEO 建站、Claude Code 工作流、AI API 成本優化、第三方整合除錯、LINE Bot 架構等多領域深度文章。
+          </dd>
+        </div>
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Authoritativeness（權威性）</dt>
+          <dd class="text-gray-600 mt-1">
+            正在累積中。weken.news 為作者個人原創數據記錄站，後續會新增 /citations 收錄第三方提及。
+          </dd>
+        </div>
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Trustworthiness（可信度）</dt>
+          <dd class="text-gray-600 mt-1">
+            所有引用數據透過 WebSearch 或實測驗證。無法驗證內容（如未實接 API）會在文章開頭明標。錯誤判斷會主動 retract（見銷售分析、AEO framework 引用案例）。
+          </dd>
+        </div>
+        <div class="border border-gray-100 rounded p-3">
+          <dt class="font-semibold text-gray-900">Transparency（透明度）</dt>
+          <dd class="text-gray-600 mt-1">
+            業務範圍 / 利益迴避 / AI 協作揭露皆於 /about#transparency 完整公開。本站不收受贊助、不放 affiliate 連結、不放廣告。
+          </dd>
+        </div>
       </dl>
     </section>
 

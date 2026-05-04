@@ -134,8 +134,13 @@ const siteSchema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteURL}${ogImage}`} />
 
-    <!-- RSS Feed Discovery -->
+    <!-- RSS Feed Discovery (主 feed + 5 個主題子 feed) -->
     <link rel="alternate" type="application/rss+xml" title="weken.news RSS" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="weken.news AEO 主題 RSS" href="/rss/aeo.xml" />
+    <link rel="alternate" type="application/rss+xml" title="weken.news Claude Code 主題 RSS" href="/rss/claude-code.xml" />
+    <link rel="alternate" type="application/rss+xml" title="weken.news AI 成本效能 RSS" href="/rss/ai-cost-perf.xml" />
+    <link rel="alternate" type="application/rss+xml" title="weken.news 整合除錯 RSS" href="/rss/debug-integration.xml" />
+    <link rel="alternate" type="application/rss+xml" title="weken.news LINE Bot 自動化 RSS" href="/rss/line-bot-automation.xml" />
 
     <!-- AEO: Site-level Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />

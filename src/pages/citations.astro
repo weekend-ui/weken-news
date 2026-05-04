@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// 第三方提及收錄。每筆是有人在外部平台 mention weken.news 或 週末哥的紀錄。
+// 累積多了能變成 N.E.E.A.T.T 的 Notability 證據池。
+// 新增提及時加進此 array，按 date 倒序。
+interface Citation {
+  date: string;
+  source: string;
+  platform: 'Threads' | 'FB' | 'IG' | 'Skool' | 'YouTube' | 'Podcast' | 'Blog' | 'News' | 'Forum' | 'Other';
+  url?: string;
+  context: string;
+  type: 'mention' | 'quote' | 'review' | 'interview' | 'collaboration';
+}
+
+const citations: Citation[] = [
+  // 範例條目（待週末哥補實際資料）
+  // {
+  //   date: '2026-05-04',
+  //   source: '某行銷顧問',
+  //   platform: 'Threads',
+  //   url: 'https://www.threads.net/@example/post/xxx',
+  //   context: '推薦了 weken.news 的 AEO 實戰文章',
+  //   type: 'mention',
+  // },
+];
+
+// AEO: ItemList Schema
+const itemListSchema = citations.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "weken.news 第三方提及紀錄",
+  "description": "外部平台對 weken.news 或週末哥的提及、引用、評論、訪談收錄",
+  "numberOfItems": citations.length,
+  "itemListElement": citations.map((c, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "item": {
+      "@type": "CreativeWork",
+      "name": c.context,
+      "datePublished": c.date,
+      "url": c.url,
+      "publisher": { "@type": "Organization", "name": c.source },
+      "about": { "@id": `${siteURL}/#person` }
+    }
+  }))
+} : null;
+
+const platformIcons: Record<string, string> = {
+  Threads: '@',
+  FB: 'f',
+  IG: '◎',
+  Skool: '#',
+  YouTube: '▶',
+  Podcast: '♪',
+  Blog: '✎',
+  News: '⊞',
+  Forum: '◆',
+  Other: '·',
+};
+---
+
+<BaseLayout
+  title="第三方提及與引用"
+  description="外部平台對 weken.news 或週末哥的提及、引用、評論、訪談紀錄。N.E.E.A.T.T 框架的 Notability 證據池。"
+>
+  {itemListSchema && <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />}
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">第三方提及與引用</h1>
+    <p class="text-gray-600 leading-relaxed mb-8">
+      這頁收錄外部平台（媒體 / Podcast / 社群 / 部落格）對 weken.news 或週末哥的提及紀錄，作為 N.E.E.A.T.T 框架的 Notability 證據池。
+    </p>
+
+    {citations.length === 0 ? (
+      <div class="bg-yellow-50 border border-[#F5C518]/40 rounded-lg p-6">
+        <p class="text-gray-700 leading-relaxed mb-3">
+          <strong>目前累積中。</strong>
+        </p>
+        <p class="text-sm text-gray-600 leading-relaxed">
+          weken.news 於 2026-04-14 上線，現處於早期 Notability 累積階段。
+          外部提及紀錄會隨時間累積在此頁。
+        </p>
+        <p class="text-sm text-gray-600 leading-relaxed mt-3">
+          如果你引用過 weken.news 或週末哥的內容，歡迎透過
+          <a href="https://www.threads.net/@wk.change" target="_blank" rel="noopener noreferrer" class="text-[#F5C518] hover:underline">Threads @wk.change</a>
+          告訴我，我會補進這份紀錄。
+        </p>
+      </div>
+    ) : (
+      <div class="space-y-4">
+        {citations.map(c => (
+          <article class="border border-gray-100 rounded-lg p-4 hover:border-[#F5C518] hover:bg-yellow-50 transition-colors">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#1F2937] flex items-center justify-center flex-shrink-0">
+                <span class="text-[#F5C518] font-bold">{platformIcons[c.platform] || '·'}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-baseline gap-2 mb-1">
+                  <span class="font-semibold text-gray-900">{c.source}</span>
+                  <span class="text-xs text-gray-400">·</span>
+                  <span class="text-xs text-gray-500">{c.platform}</span>
+                  <span class="text-xs text-gray-400">·</span>
+                  <time class="text-xs text-gray-500">{c.date}</time>
+                  <span class="text-xs px-2 py-0.5 rounded bg-gray-50 text-gray-600">{c.type}</span>
+                </div>
+                <p class="text-sm text-gray-700 leading-relaxed">{c.context}</p>
+                {c.url && (
+                  <a href={c.url} target="_blank" rel="noopener noreferrer"
+                     class="text-xs text-[#F5C518] hover:underline mt-2 inline-block">→ 查看原文</a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+
+    <section class="mt-12 pt-8 border-t border-gray-100">
+      <h2 class="text-lg font-bold mb-3">為什麼有這頁</h2>
+      <p class="text-sm text-gray-600 leading-relaxed mb-3">
+        Jason Barnard / Kalicube 的 N.E.E.A.T.T 框架指出，Notability（顯著性）是 E-E-A-T 訊號的 prerequisite。
+        沒有外部提及，演算法很難確認一個 brand entity 是否真的 notable。
+      </p>
+      <p class="text-sm text-gray-600 leading-relaxed">
+        這頁作為 weken.news 的 Notability 證據池，讓 AI 助理在評估「週末哥 / weken.news 是誰」時，能直接找到第三方背書資料。
+      </p>
+    </section>
+  </article>
+</BaseLayout>
