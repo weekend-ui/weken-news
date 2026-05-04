@@ -1,5 +1,6 @@
 # weken.news robots.txt
 # AEO-optimized: explicitly allow all major AI crawlers
+# Last updated: 2026-05-04
 
 User-agent: *
 Allow: /
@@ -11,16 +12,31 @@ Allow: /
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
 # Anthropic
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 # Perplexity
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Perplexity-User
+Allow: /
+
 # Google AI
 User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
 Allow: /
 
 # Amazon
@@ -31,8 +47,48 @@ Allow: /
 User-agent: FacebookBot
 Allow: /
 
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: meta-externalfetcher
+Allow: /
+
 # Apple
+User-agent: Applebot
+Allow: /
+
 User-agent: Applebot-Extended
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+# ByteDance / TikTok
+User-agent: Bytespider
+Allow: /
+
+# Common Crawl (used to train many LLMs)
+User-agent: CCBot
+Allow: /
+
+# Diffbot
+User-agent: Diffbot
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckAssistBot
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# You.com
+User-agent: YouBot
 Allow: /
 
 Sitemap: https://weken.news/sitemap.xml

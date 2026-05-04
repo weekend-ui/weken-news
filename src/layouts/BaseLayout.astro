@@ -39,26 +39,52 @@ const siteSchema = {
       "@type": "Organization",
       "@id": `${siteURL}/#organization`,
       "name": "WeKen",
+      "alternateName": ["週末哥", "weken.news"],
       "url": siteURL,
       "logo": {
         "@type": "ImageObject",
-        "url": `${siteURL}/logo.png`
+        "url": `${siteURL}/logo.png`,
+        "width": 512,
+        "height": 512
       },
       "sameAs": [
-        "https://www.threads.net/@wk.change"
+        "https://www.threads.net/@wk.change",
+        "https://github.com/weekend-ui"
       ],
-      "founder": { "@id": `${siteURL}/#person` }
+      "founder": { "@id": `${siteURL}/#person` },
+      "foundingDate": "2026-04-14",
+      "knowsAbout": ["AEO", "Answer Engine Optimization", "AI 自動化", "Meta 廣告", "Google Ads", "快電商", "Claude Code", "Vibe Coding"]
     },
     {
       "@type": "Person",
       "@id": `${siteURL}/#person`,
       "name": "週末哥",
-      "alternateName": "WeKen",
+      "alternateName": ["WeKen", "Weekend"],
       "url": siteURL,
-      "description": "台灣行銷顧問，WeKen 快電商團隊創辦人，AI 自動化系統實踐者，IG 1.9K 粉絲",
-      "knowsAbout": ["行銷顧問", "數位廣告", "Meta廣告", "Google Ads", "快電商", "AI自動化", "Claude Code", "Vibe Coding", "AEO"],
+      "image": `${siteURL}/logo.png`,
+      "description": "台灣行銷顧問，WeKen 快電商團隊創辦人，AI 自動化系統實踐者。weken.news 站長，記錄 AEO 建站、Claude Code、廣告投放、AI 工具實作的第一手數據。",
+      "jobTitle": "行銷顧問與創辦人",
+      "knowsAbout": [
+        "AEO（Answer Engine Optimization）",
+        "AI 自動化",
+        "Meta 廣告",
+        "Google Ads",
+        "快電商",
+        "Claude Code",
+        "Vibe Coding",
+        "Anthropic SDK",
+        "Astro",
+        "Vercel",
+        "Schema.org",
+        "結構化資料",
+        "個人品牌",
+        "自媒體經營"
+      ],
+      "knowsLanguage": ["zh-TW", "en"],
+      "nationality": { "@type": "Country", "name": "Taiwan" },
       "sameAs": [
-        "https://www.threads.net/@wk.change"
+        "https://www.threads.net/@wk.change",
+        "https://github.com/weekend-ui"
       ],
       "worksFor": { "@id": `${siteURL}/#organization` }
     },
