@@ -92,6 +92,10 @@
 - [x] 第一隻 AI 爬蟲到訪：Apple 爬蟲打 /api/stats（2026-05-02 22:22 台灣時間）
 - [x] Google Search Console 開始有曝光：「npx skills」相關關鍵字 51 次曝光 2 次點擊（3 個月累積）
 
+### 2026-05-03 ~ 2026-05-04 文章擴充
+- [x] 第三十篇：meta-ads-mcp-claude-desktop-setup（Meta Ads MCP URL 校正 + 4 月 29 號 beta 發布 + 風險評估，誠實標明未實接過）
+- [x] 第三十一篇：claude-code-memory-architecture-5-rounds-deep-dive（5 輪對話挖深 + Claude Code 4 層架構發現 + 三組系統性偏見，週末哥指揮日誌視角寫法，rules 系統升級成主角）
+
 ## 進行中
 
 - [ ] **DNS 沒生效（高優先）**：A record 之前加在 Namecheap Advanced DNS 但被 parking 機制覆蓋，nslookup weken.news 仍指向 198.54.117.242（Namecheap parking IP）。修法：Namecheap → weken.news → Manage → Nameservers 改成 Custom DNS：ns1.vercel-dns.com / ns2.vercel-dns.com，等 1-24h propagation。SSL 之後 Vercel 自動發。
