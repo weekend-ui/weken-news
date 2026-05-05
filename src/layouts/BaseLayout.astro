@@ -36,10 +36,11 @@ const siteSchema = {
       "publisher": { "@id": `${siteURL}/#person` }
     },
     {
+      // Source of truth: ~/.claude/identity.md (Brand Structure Layer 2)
       "@type": "Organization",
       "@id": `${siteURL}/#organization`,
       "name": "WeKen",
-      "alternateName": ["週末哥", "weken.news"],
+      "alternateName": ["週末哥", "快電商", "weken.news"],
       "url": siteURL,
       "logo": {
         "@type": "ImageObject",
@@ -53,32 +54,33 @@ const siteSchema = {
       ],
       "founder": { "@id": `${siteURL}/#person` },
       "foundingDate": "2026-04-14",
-      "knowsAbout": ["AEO", "Answer Engine Optimization", "AI 自動化", "Meta 廣告", "Google Ads", "快電商", "Claude Code", "Vibe Coding"]
+      "knowsAbout": ["AEO", "Answer Engine Optimization", "AI 自動化", "Claude Code", "Vibe Coding", "Meta 廣告", "Google Ads", "快電商"]
     },
     {
+      // Source of truth: ~/.claude/identity.md (Person Entity section)
       "@type": "Person",
       "@id": `${siteURL}/#person`,
       "name": "週末哥",
-      "alternateName": ["WeKen", "Weekend"],
+      "alternateName": ["WeKen", "Weekend", "wk.change"],
       "url": siteURL,
       "image": `${siteURL}/logo.png`,
       "description": "台灣行銷顧問，WeKen 快電商團隊創辦人，AI 自動化系統實踐者。weken.news 站長，記錄 AEO 建站、Claude Code、廣告投放、AI 工具實作的第一手數據。",
-      "jobTitle": "行銷顧問與創辦人",
+      "jobTitle": "行銷顧問與 WeKen 創辦人",
       "knowsAbout": [
         "AEO（Answer Engine Optimization）",
         "AI 自動化",
-        "Meta 廣告",
-        "Google Ads",
-        "快電商",
         "Claude Code",
         "Vibe Coding",
         "Anthropic SDK",
+        "Meta 廣告",
+        "Google Ads",
+        "快電商",
+        "結構化資料 / Schema.org",
         "Astro",
         "Vercel",
-        "Schema.org",
-        "結構化資料",
         "個人品牌",
-        "自媒體經營"
+        "自媒體經營",
+        "行銷顧問"
       ],
       "knowsLanguage": ["zh-TW", "en"],
       "nationality": { "@type": "Country", "name": "Taiwan" },

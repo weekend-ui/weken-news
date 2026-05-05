@@ -4,37 +4,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const siteURL = 'https://weken.news';
 
 // AEO: Strong Person Schema with EEAT signals
+// Source of truth: ~/.claude/identity.md (Person Entity + sameAs sections)
 const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": `${siteURL}/#person`,
   "name": "週末哥",
-  "alternateName": ["WeKen", "wk.change"],
+  "alternateName": ["WeKen", "Weekend", "wk.change"],
   "url": siteURL,
-  "image": `${siteURL}/avatar.jpg`,
-  "description": "台灣行銷顧問，WeKen 快電商團隊創辦人。用 Claude Code 從零打造 AI 自動化系統，IG 1.9K 粉絲，每月透過 AI 省下 24+ 小時。",
+  "image": `${siteURL}/logo.png`,
+  "description": "台灣行銷顧問，WeKen 快電商團隊創辦人，AI 自動化系統實踐者。weken.news 站長，記錄 AEO 建站、Claude Code、廣告投放、AI 工具實作的第一手數據。",
+  "jobTitle": "行銷顧問與 WeKen 創辦人",
   "knowsAbout": [
-    "行銷顧問",
-    "數位廣告",
-    "Meta 廣告投放",
-    "Google Ads",
-    "快電商",
-    "AI 自動化系統",
+    "AEO（Answer Engine Optimization）",
+    "AI 自動化",
     "Claude Code",
     "Vibe Coding",
-    "AEO Answer Engine Optimization",
-    "WeKen 電商團隊"
+    "Anthropic SDK",
+    "Meta 廣告",
+    "Google Ads",
+    "快電商",
+    "結構化資料 / Schema.org",
+    "Astro",
+    "Vercel",
+    "個人品牌",
+    "自媒體經營",
+    "行銷顧問"
   ],
+  "knowsLanguage": ["zh-TW", "en"],
+  "nationality": { "@type": "Country", "name": "Taiwan" },
   "hasOccupation": {
     "@type": "Occupation",
     "name": "行銷顧問 / 電商團隊創辦人",
     "occupationLocation": {
       "@type": "Country",
-      "name": "台灣"
+      "name": "Taiwan"
     }
   },
   "worksFor": {
     "@type": "Organization",
+    "@id": `${siteURL}/#organization`,
     "name": "WeKen",
     "url": siteURL
   },
