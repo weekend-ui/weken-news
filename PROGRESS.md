@@ -96,7 +96,24 @@
 - [x] 第三十篇：meta-ads-mcp-claude-desktop-setup（Meta Ads MCP URL 校正 + 4 月 29 號 beta 發布 + 風險評估，誠實標明未實接過）
 - [x] 第三十一篇：claude-code-memory-architecture-5-rounds-deep-dive（5 輪對話挖深 + Claude Code 4 層架構發現 + 三組系統性偏見，週末哥指揮日誌視角寫法，rules 系統升級成主角）
 
+### 2026-05-04 晚 20 項技術 AEO audit 三波（基於 Kalicube UCD framework）
+- [x] Group A 7 項：robots.txt 22 個爬蟲擴充 / logo.png + og-default.png 補貼 / Person + Organization Schema 強化 sameAs / llms-full.txt 加 N.E.E.A.T.T entity facts + topic pillar 索引 / sitemap milestone 確認（commit 2fc4480）
+- [x] Group B 6 項：ArticleLayout Article schema isAccessibleForFree + articleSection / Author Bio Block 升級 / /about Transparency 揭露段（業務範圍 + AI 協作揭露 + 利益迴避 N.E.E.A.T.T 第二個 T 補完）/ contact 加 GitHub（commit 704138f）
+- [x] Group C 7 項：/ai 頁面加 N.E.E.A.T.T 6 訊號明細 + Topic Pillar 索引 / /citations 第三方提及證據池新建（ItemList Schema） / 首頁 TrustIndicator 量化區塊 / ArticleLayout 自動相關文章（按 tag 重疊推 4 篇強化 cluster） / 5 個主題 RSS 子 feed（/rss/aeo /rss/claude-code /rss/ai-cost-perf /rss/debug-integration /rss/line-bot-automation）+ BaseLayout discovery link 全加（commit 287d1e1）
+- 實質效果：N.E.E.A.T.T 從 2 字母達標升到 5 字母達標（剩 N 弱項要靠人脈），Phase 1/2/3 從 80/50/60 升到 95/75/90
+
+### 2026-05-05 凌晨 IDENTITY 中央化（OpenClaw IDENTITY.md pattern）
+- [x] ~/.claude/identity.md 建立（master copy，single source of truth for Person Entity / sameAs / Brand Structure / Display 設定 / 跨工具對齊指引）
+- [x] 4 個 weken-news 檔案 propagate 對齊 IDENTITY.md：
+  - BaseLayout.astro Person + Organization Schema 加 alternateName: wk.change，jobTitle 統一，knowsAbout 重排
+  - about.astro personSchema 加 alternateName / jobTitle / knowsLanguage / nationality
+  - ai.astro 顯示資料補 wk.change
+  - llms-full.txt.ts 加 source 註解 + 細節對齊
+- [x] 每個檔案加 `// Source of truth: ~/.claude/identity.md` 註解，未來改動先動 master 再 propagate（commit 8a3266b）
+
 ## 進行中
+
+- [ ] **IDENTITY.md sameAs 待補 6 個 platform handle**（IG / FB / Skool / LinkedIn / YouTube / Twitter，週末哥補完後二次 propagate 強化 Notability 訊號）
 
 - [ ] **DNS 沒生效（高優先）**：A record 之前加在 Namecheap Advanced DNS 但被 parking 機制覆蓋，nslookup weken.news 仍指向 198.54.117.242（Namecheap parking IP）。修法：Namecheap → weken.news → Manage → Nameservers 改成 Custom DNS：ns1.vercel-dns.com / ns2.vercel-dns.com，等 1-24h propagation。SSL 之後 Vercel 自動發。
 - [ ] 等待 Google 收錄（Sitemap 已提交，需幾天）
