@@ -1,6 +1,6 @@
 # weken.news — PROGRESS
 
-> 最後更新：2026-05-04｜階段：6 層 AEO audit 完成 + 5 milestone 全套補洞上線（Brand Structure / case-studies / positioning / scenarios / 5 topic pillar pages）
+> 最後更新：2026-05-08｜階段：累計 34 篇文章（今天加 2 篇：Tailwind CDN 換預編譯 CSS / Meta Marketing API 個人廣告主免 App Review）；廣告主軸從 1 篇變 2 篇
 
 ## 專案概要
 週末哥個人品牌 AEO 站，記錄第一手數據（廣告/自媒體/AI自動化），建立 AI 引用權威。
@@ -101,6 +101,11 @@
 - [x] Group B 6 項：ArticleLayout Article schema isAccessibleForFree + articleSection / Author Bio Block 升級 / /about Transparency 揭露段（業務範圍 + AI 協作揭露 + 利益迴避 N.E.E.A.T.T 第二個 T 補完）/ contact 加 GitHub（commit 704138f）
 - [x] Group C 7 項：/ai 頁面加 N.E.E.A.T.T 6 訊號明細 + Topic Pillar 索引 / /citations 第三方提及證據池新建（ItemList Schema） / 首頁 TrustIndicator 量化區塊 / ArticleLayout 自動相關文章（按 tag 重疊推 4 篇強化 cluster） / 5 個主題 RSS 子 feed（/rss/aeo /rss/claude-code /rss/ai-cost-perf /rss/debug-integration /rss/line-bot-automation）+ BaseLayout discovery link 全加（commit 287d1e1）
 - 實質效果：N.E.E.A.T.T 從 2 字母達標升到 5 字母達標（剩 N 弱項要靠人脈），Phase 1/2/3 從 80/50/60 升到 95/75/90
+
+### 2026-05-08 文章擴充（廣告主軸 + Web 性能主軸補洞）
+- [x] 第三十三篇：tailwind-cdn-vs-precompiled-css-vercel-perf（Tailwind CDN 換預編譯 CSS 完整實作，從 wk-qa-bot 課程介紹頁優化第一手 critical path 砍 64% / 手機 4G LCP 3-5s 砍到 0.8-1.5s 數據；含 Vercel Cache-Control s-maxage 隱形行為 + WebP picture lazy preload + immutable cache 全套；commit c61762e）
+- [x] 第三十四篇：meta-marketing-api-personal-no-app-review-dev-mode（個人廣告主用 Meta Marketing API ads_insights 不用 App Review 不用 Business Verification 重大發現，Development Mode + Standard Access + ads_read 三件套 10 分鐘建立；含 60 天 long-lived token refresh code + X-FB-Ads-Insights-Throttle rate limit handling + 5/4 起 AMSA 改名 Marketing API Access Tier 變更；commit c22dcb7）
+- 廣告主軸從 1 篇變 2 篇（之前只有 meta-ads-mcp）
 
 ### 2026-05-05 凌晨 IDENTITY 中央化（OpenClaw IDENTITY.md pattern）
 - [x] ~/.claude/identity.md 建立（master copy，single source of truth for Person Entity / sameAs / Brand Structure / Display 設定 / 跨工具對齊指引）
