@@ -107,6 +107,9 @@
 - [x] 第三十四篇：meta-marketing-api-personal-no-app-review-dev-mode（個人廣告主用 Meta Marketing API ads_insights 不用 App Review 不用 Business Verification 重大發現，Development Mode + Standard Access + ads_read 三件套 10 分鐘建立；含 60 天 long-lived token refresh code + X-FB-Ads-Insights-Throttle rate limit handling + 5/4 起 AMSA 改名 Marketing API Access Tier 變更；commit c22dcb7）
 - 廣告主軸從 1 篇變 2 篇（之前只有 meta-ads-mcp）
 
+### 2026-05-12 文章擴充（Weekend Method 系列）
+- [x] 第三十五篇：non-developer-30-ai-tools-claude-code-vercel-method（不會寫程式怎麼一年做出 30 個 AI 工具？教學型 case study 從 Weekend Method 6 條原則改編，2500 字含 directAnswer + 5 FAQ + 3 howToSteps，commit 1ab88eb）
+
 ### 2026-05-05 凌晨 IDENTITY 中央化（OpenClaw IDENTITY.md pattern）
 - [x] ~/.claude/identity.md 建立（master copy，single source of truth for Person Entity / sameAs / Brand Structure / Display 設定 / 跨工具對齊指引）
 - [x] 4 個 weken-news 檔案 propagate 對齊 IDENTITY.md：
