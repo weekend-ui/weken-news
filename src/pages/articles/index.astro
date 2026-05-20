@@ -1,4 +1,7 @@
 ---
+// SSR（不 prerender），讓 middleware.ts 在 list 頁也 track AI bot 訪問
+export const prerender = false;
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 

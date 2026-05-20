@@ -1,4 +1,9 @@
 ---
+// SSR（不 prerender），讓 middleware.ts 在每個文章 request 都跑，
+// 才能 track AI bot（GPTBot / ChatGPT-User / OAI-SearchBot / etc）訪問記錄。
+// 若改回 prerender，middleware 會被 Vercel Edge Cache bypass，AI bot 訪問全部漏記。
+export const prerender = false;
+
 import { getCollection, type CollectionEntry } from 'astro:content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 
