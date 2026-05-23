@@ -253,4 +253,37 @@ const breadcrumbSchema = {
       </div>
     </aside>
   </article>
+
+  <style is:global>
+    .prose .geo-quote {
+      background: #FEF9E7;
+      border-left: 4px solid #D4AF37;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 28px 0;
+      font-style: normal;
+      position: relative;
+      quotes: none;
+    }
+    .prose .geo-quote::before {
+      content: '📌 GEO 引用區塊';
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: #92400E;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .prose .geo-quote p,
+    .prose .geo-quote > div {
+      margin: 0;
+      color: #1F2937;
+      font-weight: 500;
+      line-height: 1.7;
+      font-size: 0.95em;
+    }
+    .prose .geo-quote p + p {
+      margin-top: 8px;
+    }
+  </style>
 </BaseLayout>

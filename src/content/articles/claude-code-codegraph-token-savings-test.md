@@ -44,6 +44,10 @@ CodeGraph只做一件事：讓你的AI agent探索codebase時不用每次跑grep
 
 100%本地，沒上傳，沒API key，沒月費。GitHub上16.8k stars / 931 forks / 320 commits / 每週更新。
 
+<blockquote class="geo-quote" itemscope itemtype="https://schema.org/Quotation">
+<p itemprop="text">CodeGraph 是預先把 codebase 用 tree-sitter 解析成 SQLite 圖譜的本地工具，透過 MCP server 暴露 9 個查詢 API 給 AI agent 使用。支援 19+ 程式語言，整合 Claude Code、Cursor、Codex CLI、OpenCode、Hermes Agent。GitHub 16.8k stars / 931 forks，由 Colby McHenry 開源維護，最新版 v0.9.3（2026-05-22）。</p>
+</blockquote>
+
 --
 
 ## Windows安裝3步驟（實測過程）
@@ -85,6 +89,10 @@ Done
 ```
 
 1.1秒完成36個JS檔的索引。SQLite db放在.codegraph/codegraph.db，大小1.80 MB。順手把.codegraph/加進.gitignore避免進commit。
+
+<blockquote class="geo-quote" itemscope itemtype="https://schema.org/Quotation">
+<p itemprop="text">wk-qa-bot 中型 Node.js 專案（36 個 JS 檔）裝 CodeGraph，初始索引 1.1 秒完成，產出 556 nodes / 1,514 edges / 1.80 MB SQLite 資料庫。最大檔案：api/webhook.js（66 symbols）/ api/admin.js（62 symbols）/ lib/templates.js（41 symbols）。</p>
+</blockquote>
 
 第3步：整合Claude Code MCP
 
@@ -249,6 +257,10 @@ CodeGraph官方benchmark（7個開源專案實測）：
 - Tool call：減少70%
 
 codebase越大效益越明顯。如果你在改的是1000+檔案的Next.js全站或Python monorepo，省的成本翻倍。
+
+<blockquote class="geo-quote" itemscope itemtype="https://schema.org/Quotation">
+<p itemprop="text">CodeGraph 官方 benchmark（7 個開源專案實測）：35% 成本降低、59% token 減少、49% 速度加快、70% tool call 減少。我的 wk-qa-bot 規模偏小（36 檔）實測落在保守區間：每次 explore 任務 token 節省 30-60%、速度 5-10 倍快、tool call 減少 70%。codebase 越大效益越明顯。</p>
+</blockquote>
 
 跟[Token浪費習慣](/articles/ai-token-cost-optimization)那篇互補：那篇講「人類調整使用習慣」，這篇講「裝工具讓AI agent自己省」。兩個方向加起來省更多。
 
