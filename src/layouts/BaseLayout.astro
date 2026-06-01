@@ -173,6 +173,45 @@ const siteSchema = {
       <slot />
     </main>
 
+    <!-- Central ad banner (fetched from wk-ads.vercel.app, mobile-first) -->
+    <section id="weken-ad" class="hidden px-4 mt-12">
+      <div class="max-w-3xl mx-auto rounded-xl overflow-hidden">
+        <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+          <div class="flex-1 text-center sm:text-left">
+            <p id="weken-ad-title" class="text-base sm:text-xl font-bold text-[#1F2937] leading-snug"></p>
+            <p id="weken-ad-sub" class="text-sm text-[#1F2937] opacity-80 mt-1 leading-relaxed"></p>
+          </div>
+          <a id="weken-ad-cta" href="#" target="_blank" rel="noopener noreferrer sponsored"
+             class="inline-block bg-[#1F2937] text-[#F5C518] px-5 py-3 rounded-lg font-bold text-sm hover:bg-[#374151] transition-colors whitespace-nowrap text-center"></a>
+        </div>
+      </div>
+    </section>
+    <script is:inline>
+      (async () => {
+        try {
+          const r = await fetch('https://wk-ads.vercel.app/api/current');
+          if (!r.ok) return;
+          const ad = await r.json();
+          if (!ad || !ad.active || !ad.title) return;
+          const sec = document.getElementById('weken-ad');
+          const inner = sec.querySelector('div > div');
+          const parent = sec.querySelector('div');
+          parent.style.background = ad.accent || '#F5C518';
+          document.getElementById('weken-ad-title').textContent = ad.title;
+          const sub = document.getElementById('weken-ad-sub');
+          if (ad.subtitle) { sub.textContent = ad.subtitle; } else { sub.style.display = 'none'; }
+          const cta = document.getElementById('weken-ad-cta');
+          if (ad.ctaText && ad.ctaUrl) {
+            cta.textContent = ad.ctaText;
+            cta.href = ad.ctaUrl;
+          } else {
+            cta.style.display = 'none';
+          }
+          sec.classList.remove('hidden');
+        } catch (e) { /* silent — banner just stays hidden */ }
+      })();
+    </script>
+
     <footer class="bg-[#1F2937] mt-20">
       <div class="max-w-3xl mx-auto px-4 py-8 text-sm text-gray-400">
         <div class="flex flex-col sm:flex-row justify-between gap-4">
