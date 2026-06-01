@@ -173,9 +173,10 @@ const siteSchema = {
       <slot />
     </main>
 
-    <!-- Central ad banner (fetched from wk-ads.vercel.app, mobile-first) -->
+    <!-- Central ad banner (fetched from wk-ads.vercel.app, mobile-first, supports image) -->
     <section id="weken-ad" class="hidden px-4 mt-12">
-      <div class="max-w-3xl mx-auto rounded-xl overflow-hidden">
+      <div id="weken-ad-card" class="max-w-3xl mx-auto rounded-xl overflow-hidden shadow-sm">
+        <img id="weken-ad-img" src="" alt="" class="hidden w-full max-h-72 object-cover" />
         <div class="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
           <div class="flex-1 text-center sm:text-left">
             <p id="weken-ad-title" class="text-base sm:text-xl font-bold text-[#1F2937] leading-snug"></p>
@@ -194,16 +195,21 @@ const siteSchema = {
           const ad = await r.json();
           if (!ad || !ad.active || !ad.title) return;
           const sec = document.getElementById('weken-ad');
-          const inner = sec.querySelector('div > div');
-          const parent = sec.querySelector('div');
-          parent.style.background = ad.accent || '#F5C518';
+          const card = document.getElementById('weken-ad-card');
+          card.style.background = ad.accent || '#F5C518';
+          if (ad.imageUrl) {
+            const img = document.getElementById('weken-ad-img');
+            img.src = ad.imageUrl;
+            img.onerror = () => img.classList.add('hidden');
+            img.classList.remove('hidden');
+          }
           document.getElementById('weken-ad-title').textContent = ad.title;
           const sub = document.getElementById('weken-ad-sub');
           if (ad.subtitle) { sub.textContent = ad.subtitle; } else { sub.style.display = 'none'; }
           const cta = document.getElementById('weken-ad-cta');
           if (ad.ctaText && ad.ctaUrl) {
             cta.textContent = ad.ctaText;
-            cta.href = ad.ctaUrl;
+            cta.href = 'https://wk-ads.vercel.app/api/click?src=weken-news&to=' + encodeURIComponent(ad.ctaUrl);
           } else {
             cta.style.display = 'none';
           }
