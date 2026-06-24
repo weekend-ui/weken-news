@@ -3,7 +3,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { Redis } from '@upstash/redis';
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ url }) => {
   try {
     const redis = new Redis({
       url: import.meta.env.UPSTASH_REDIS_REST_URL?.trim(),
@@ -55,11 +55,38 @@ export const GET: APIRoute = async () => {
       .slice(0, 10)
       .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {} as Record<string, number>);
 
+    // 真人訪客：只有帶正確 key 才回（預設只有站長看得到），其他人只看到爬蟲數據
+    const authed = !!import.meta.env.STATS_KEY && url.searchParams.get('key') === import.meta.env.STATS_KEY;
+    let human: { total: number; today: number; topPages: Record<string, number> } | null = null;
+    if (authed) {
+      const [hTotal, hToday, hPageKeys] = await Promise.all([
+        redis.get<number>('wkn:human:total'),
+        redis.get<number>(`wkn:human:daily:${today}`),
+        redis.keys('wkn:human:page:*'),
+      ]);
+      const hPages: Record<string, number> = {};
+      if (hPageKeys.length > 0) {
+        const hCounts = await Promise.all(hPageKeys.map((k) => redis.get<number>(k)));
+        hPageKeys.forEach((key, i) => {
+          hPages[key.replace('wkn:human:page:', '')] = hCounts[i] || 0;
+        });
+      }
+      human = {
+        total: hTotal || 0,
+        today: hToday || 0,
+        topPages: Object.entries(hPages)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 10)
+          .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {} as Record<string, number>),
+      };
+    }
+
     return new Response(JSON.stringify({
       total: total || 0,
       today: todayCount || 0,
       bots,
       topPages,
+      human,
       updatedAt: new Date().toISOString(),
     }), {
       headers: {

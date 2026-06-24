@@ -38,13 +38,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </section>
 
+    <!-- 真人訪客（私人，帶 key 才顯示）-->
+    <section id="human-section" class="mb-8 hidden">
+      <div class="border-t border-gray-200 pt-6">
+        <h2 class="text-base font-bold mb-1">真人訪客（私人）</h2>
+        <p class="text-xs text-gray-400 mb-3">只有帶網址金鑰才看得到，公開訪客看不到這區</p>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="border border-[#1F2937] bg-gray-50 rounded-xl p-5">
+            <p class="text-xs text-gray-500 mb-1">累積真人瀏覽</p>
+            <p id="human-total" class="text-3xl font-bold text-[#1F2937]">—</p>
+          </div>
+          <div class="border border-gray-200 rounded-xl p-5">
+            <p class="text-xs text-gray-500 mb-1">今日真人瀏覽</p>
+            <p id="human-today" class="text-3xl font-bold text-[#1F2937]">—</p>
+          </div>
+        </div>
+        <h3 class="text-sm font-bold mb-2 text-gray-700">各頁面真人瀏覽</h3>
+        <div id="human-pages" class="space-y-2">
+          <div class="text-sm text-gray-400">尚無資料</div>
+        </div>
+      </div>
+    </section>
+
     <p id="stat-updated" class="text-xs text-gray-400"></p>
   </div>
 
   <script>
     async function loadStats() {
       try {
-        const res = await fetch('/api/stats');
+        const key = new URLSearchParams(location.search).get('key');
+        const res = await fetch('/api/stats' + (key ? '?key=' + encodeURIComponent(key) : ''));
         const data = await res.json();
 
         // Total & today
@@ -95,6 +118,34 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <span class="text-sm font-medium text-[#1F2937] w-12 text-right">${(count as number).toLocaleString()}</span>
               </div>`;
           }).join('');
+        }
+
+        // 真人訪客（只有 API 回了 human 才顯示，代表 key 正確）
+        if (data.human) {
+          document.getElementById('human-section')!.classList.remove('hidden');
+          document.getElementById('human-total')!.textContent =
+            ((data.human.total as number) || 0).toLocaleString('zh-TW');
+          document.getElementById('human-today')!.textContent =
+            ((data.human.today as number) || 0).toLocaleString('zh-TW');
+          const hpEl = document.getElementById('human-pages')!;
+          const hpages = Object.entries(data.human.topPages || {})
+            .sort(([, a], [, b]) => (b as number) - (a as number));
+          if (hpages.length === 0) {
+            hpEl.innerHTML = '<p class="text-sm text-gray-400">尚無資料</p>';
+          } else {
+            const maxH = Math.max(...hpages.map(([, v]) => v as number));
+            hpEl.innerHTML = hpages.map(([path, count]) => {
+              const pct = maxH > 0 ? Math.round(((count as number) / maxH) * 100) : 0;
+              return `
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-gray-600 w-40 shrink-0 truncate">${path}</span>
+                  <div class="flex-1 bg-gray-100 rounded-full h-2">
+                    <div class="bg-[#1F2937] h-2 rounded-full" style="width:${pct}%"></div>
+                  </div>
+                  <span class="text-sm font-medium text-[#1F2937] w-12 text-right">${(count as number).toLocaleString()}</span>
+                </div>`;
+            }).join('');
+          }
         }
 
         // Updated time

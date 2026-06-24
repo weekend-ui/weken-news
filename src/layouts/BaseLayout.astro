@@ -114,6 +114,19 @@ const siteSchema = {
     <meta name="google-site-verification" content="LjuiKFwkSxlnCTMGS7XcntBoDpJKl8ayoVmWOfYA678" />
     <!-- Vercel Web Analytics（訪客流量，已在專案啟用，免 dashboard 開關）-->
     <script defer src="/_vercel/insights/script.js"></script>
+    <!-- 自建真人瀏覽追蹤 beacon（只在正式站觸發，AI 爬蟲不跑 JS 不會打到）-->
+    <script>
+      if (location.hostname === 'weken.news') {
+        try {
+          fetch('/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: location.pathname }),
+            keepalive: true,
+          }).catch(function () {});
+        } catch (e) {}
+      }
+    </script>
 
     <!-- Primary Meta -->
     <title>{fullTitle}</title>
