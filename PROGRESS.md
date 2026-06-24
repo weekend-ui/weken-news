@@ -254,3 +254,34 @@ curl GPTBot UA 訪問 article → HTTP 200 + X-Vercel-Cache: MISS + ttfb 1.34s +
 重要紀律：第 2-4 篇週末哥沒給真實數字，沒杜撰 CPA/花費，依 wk-aeo-writer G7 寫成「方法/決策框架」型（不是假裝實測）。已跟他講明哪天補真實數字可升級成第一手實測版。本機 build 兩次驗過無錯才推。
 
 下一步（等週末哥）：他若丟真實數字（hook CPA 對照 / ABO-CBO 成效 / 實際紅線），把對應篇從框架升級成實測。發節奏建議：週二廣告群集 / 週四 Claude Code / 週六短文。
+
+## 2026-06-24 流量量測三件套：GSC 驗證修復 + Vercel Analytics + 自建真人追蹤（已上線）
+
+起點：週末哥說 weken.news 的 GSC 失效了，問哪種驗證方式最好；接著要能自己看訪客流量。
+
+1. GSC 驗證修復（commit 24d3806）
+診斷：weken.news nameserver 是 ns1/ns2.vercel-dns.com（DNS 託管在 Vercel，不是 Namecheap），目前無 google-site-verification TXT。成因：之前換 nameserver（Namecheap→Vercel）舊 TXT 沒搬過來。
+解法：改用 code 內 meta 標籤（URL-prefix 屬性），不受 DNS 變動影響。加進 BaseLayout head。token: LjuiKFwkSxlnCTMGS7XcntBoDpJKl8ayoVmWOfYA678。
+
+2. Vercel Web Analytics（commit 63dc071）
+查證 /_vercel/insights/script.js 回 200 = 專案本來就已啟用，只缺頁面載入追蹤碼。加一行 `<script defer src="/_vercel/insights/script.js">` 到 BaseLayout。零 dashboard 操作（用 Vercel CLI token 查 API 確認）。數據看 Vercel 後台 Analytics 分頁。
+
+3. 自建真人訪客追蹤（commit 7ebcb72）— 私人，只有站長看得到，只記瀏覽次數
+- 新增 src/pages/api/track.ts：瀏覽器 beacon 接收端。來源檢查（只收 weken.news Origin/Referer）+ 爬蟲 UA 過濾（Googlebot 等會跑 JS 的擋掉；其他 AI 爬蟲不跑 JS 不會打到）+ 路徑 sanitize。Redis incr wkn:human:total / wkn:human:daily:{date}(30天expire) / wkn:human:page:{path}。無 IP/個資/cookie。一律回 204。
+- BaseLayout 加 beacon（只在 location.hostname==='weken.news' 觸發，fetch keepalive）。
+- src/pages/api/stats.ts 加 human 欄位：帶 ?key=STATS_KEY 才回（env var，因 repo 公開不能 hardcode）。公開訪客只看到 AI 爬蟲數據。
+- src/pages/stats.astro 加「真人訪客（私人）」區，預設 hidden，帶 key 才顯示。
+- STATS_KEY = 10ba3126625e868a71b49789（設在 Vercel env production/preview/dev，用 Vercel API POST /v10/projects/{id}/env 建立）。
+- 私人網址：https://weken.news/stats?key=10ba3126625e868a71b49789
+
+驗證（實測）：本機 build 成功 + build log 證實「Bundling function entry.mjs」= Astro Vercel adapter 把所有 SSR 打包成單一 function（所以加端點不增函式數，不踩 Vercel Hobby 12 函式上限，跟 wk-qa-bot 分散 api/*.js 架構不同）。production POST /api/track 回 204；帶 key 回真人數據、不帶回 null；Googlebot UA 被擋未計入；測試假數據用 Vercel API 取 Redis 連線清乾淨（total 歸 0）。GSC 驗證 + Vercel analytics 共存不衝突。
+
+Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →「後台 / 管理」區。
+
+技術備忘（給未來 session）：
+- weken-news DNS 在 Vercel；要加 DNS 記錄去 Vercel 後台不是 Namecheap。
+- Vercel CLI 已登入 weekend-ui team。auth token 在 ~/AppData/Roaming/com.vercel.cli/Data/auth.json。projectId prj_XouuEwJNfFVlHmpfMXf8nM8GIRWh / teamId team_jNpTzDUglyqc056hEo5EpfKJ。
+- 取 decrypted env：GET /v1/projects/{id}/env/{envId}（逐個 id，bulk decrypt=true 回的是加密 blob）。
+- repo weekend-ui/weken-news 是「公開」的：任何 secret 不能寫進 code，一律走 Vercel env。
+
+下一步（等週末哥）：訪客數據累積後，可考慮做 API 定期把真人流量報到 TG（他提過「都你來處理」），讓他連 Vercel/stats 頁都不用開。
