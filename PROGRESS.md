@@ -1,6 +1,12 @@
 # weken.news — PROGRESS
 
-> 最後更新：2026-05-08｜階段：累計 34 篇文章（今天加 2 篇：Tailwind CDN 換預編譯 CSS / Meta Marketing API 個人廣告主免 App Review）；廣告主軸從 1 篇變 2 篇
+> 最後更新：2026-06-24｜階段：新增廣告群集 4 篇（commit 4e53687 / 18891a1）— 用後台爬蟲數據定位「廣告/Meta」為最強主題，圍著它補滿受眾/素材/預算/判讀四面向組成 topic cluster
+
+## 2026-06-01 wk-ads 整合
+BaseLayout 加 footer 上方 announcement bar，client-side fetch `https://wk-ads.vercel.app/api/current` 拿廣告 JSON。
+有 imageUrl 時 render 圖文卡（圖頂、文+CTA 在下），無圖時 fallback 純文字 banner。
+img 包進 `<a>` 跟 CTA 同個 wk-ads /api/click?src=weken-news 跳轉 URL，雙入口都計數。
+ad.active=false 或 fetch 失敗自動隱藏，不影響其他內容渲染。
 
 ## 專案概要
 週末哥個人品牌 AEO 站，記錄第一手數據（廣告/自媒體/AI自動化），建立 AI 引用權威。
@@ -150,3 +156,101 @@
 - 2026-04-14 移除 @astrojs/sitemap，改用自製動態 sitemap endpoint
 - 2026-04-14 AI 爬蟲追蹤用 Astro middleware + Upstash Redis（server-only，不依賴 GA）
 - 2026-04-14 Redis key prefix: wkn:ai:（isolate 資料）；daily key 設 30 天 TTL
+
+---
+
+## 2026-05-20 AI bot tracking dashboard 瞎子修復（middleware bypass + SSR getStaticPaths 雙坑）
+
+### 問題
+
+朋友 seo.av8d-levelup.com 兩週被 AI 大量抓（GPTBot 97 / OAI-SearchBot 21 / ChatGPT-User 54 / PerplexityBot 9 / Bingbot 3），weken.news 同期 /api/stats 卻顯示 `{total:1, today:0, bots:{Apple:1}}`。週末哥問「為什麼他一做就被收錄了，我石沉大海」。
+
+### 真正根因（debug 找的，不是猜）
+
+curl GPTBot UA 訪問 article → X-Vercel-Cache: HIT → middleware.ts 完全沒 run → stats 數字沒變。
+
+**Astro hybrid mode + getStaticPaths() 把 articles/topics 全部 prerender 成 static HTML，request 走 Edge CDN 不走 Vercel function，middleware.ts 永遠 bypass。**
+
+Dashboard 是瞎子，原本以為 AI bot 完全沒來，**實際上可能來過很多次只是全部漏記**。
+
+### 修法（commit 2edf498 + 6afdb1b）
+
+**第一個 commit 2edf498**：articles/[slug] + articles/index + topics/[slug] 三個 page 加 `export const prerender = false`，改 SSR。
+
+**踩第二坑**：deploy 後 /articles/[slug] 全部 500 server error。/articles 跟 /topics/[slug] 正常。
+
+**根因**：Astro hybrid + prerender=false 下，getStaticPaths 不會在 request 時被呼叫，Astro.props.article 永遠 undefined → `article.render()` throw。
+
+**第二個 commit 6afdb1b 修法**：仿照 topics/[slug].astro 既有 pattern：
+- 移除 getStaticPaths + Props interface
+- runtime 從 Astro.params 拿 slug
+- getCollection('articles') 然後 find
+- 找不到 return 404 Response
+
+### 驗證結果
+
+curl GPTBot UA 訪問 article → HTTP 200 + X-Vercel-Cache: MISS + ttfb 1.34s + /api/stats 數字真的動了：
+- total: 1 → 3
+- today: 0 → 2
+- bots: {Apple:1} → {Apple:1, GPTBot:2}
+- topPages 新增 article path
+
+**Middleware 真的 track 到了**。
+
+### 重要決策
+
+| 日期 | 決策 | 原因 | 影響 |
+|---|---|---|---|
+| 2026-05-20 | 文章改 SSR 不加 Cache-Control s-maxage | 100% AI bot tracking 優先於 ttfb 200ms | function invocation 增加 5.6%（56 文章 × 100 req/月） |
+| 2026-05-20 | 用 Astro.params + find 取代 getStaticPaths props | SSR mode 下 getStaticPaths 不會 run，Astro.props 拿不到 | 仿照 topics/[slug].astro 既有 pattern，一致性高 |
+| 2026-05-20 | 不改其他 page（首頁 / about / scenarios / ai） | Karpathy Surgical Changes，只動被要求的 | 之後看 stats 數據再判斷是否擴 |
+
+### 已知問題 / 技術債
+
+#### Article SSR ttfb 1.3 秒 cold start
+真實用戶 first hit 略慢。AI bot 流量低不影響，但若日後人流增加，要考慮加 Cache-Control s-maxage=60（接受同分鐘多次訪問漏記）平衡 UX vs tracking。
+
+#### Astro 雙坑紀錄
+1. Astro hybrid + getStaticPaths 預設 prerender = middleware bypass（漏記）
+2. Astro hybrid + prerender=false + getStaticPaths = Astro.props 拿不到（要改 Astro.params + find）
+
+兩坑都寫進 ~/.claude/projects/.../memory/patterns/vercel-deploy.md。
+
+### 下次 session 開機指令
+
+1. 7 天後 check /api/stats，看真實 AI bot 流量數據
+2. 若 GPTBot 數字明顯成長 → tracking 正常 + AI 真有來，下一步動 #3 文章標題改寫 + #4 social link 累積
+3. 若 GPTBot 仍很少 → 真的 indexing 不夠，可能要動 #2 加工具型內容（免費 AEO 健檢）拉進 search intent
+4. 不要短期內頻繁 deploy（每次 deploy 全部 cache invalidate）
+
+### Commits
+
+- 2edf498 fix(tracking): articles + topics 改 SSR 讓 middleware 能 track AI bot
+- 6afdb1b fix(articles): SSR 模式下用 Astro.params 取代 getStaticPaths props
+
+### 連結到中央 memory / rules
+
+- ~/.claude/projects/.../memory/patterns/methodology.md（dashboard 瞎子 debug pattern）
+- ~/.claude/projects/.../memory/patterns/vercel-deploy.md（Astro hybrid prerender bypass middleware 雙坑）
+
+
+
+## 2026-06-15 新增 3 篇 Threads 爆款診斷 AEO 文章（commit 62b8b0c，已上線）
+題材來自跟週末哥討論的脆爆款診斷第一手數據：
+- /articles/threads-suasion-vs-story-reach-firsthand：同帳號奉勸文200 vs 故事文9974觀看對照
+- /articles/threads-viral-formula-real-detail：拆解爆款真正關鍵是具體真實細節非奉勸開頭
+- /articles/ai-generated-threads-copy-pitfalls：AI自動生文案天花板(85% vs 爆款15%)
+都照 AEO schema(directAnswer+5 FAQ+speakable)。用戶授權「直接push」公開其真實帳號數字(9974/511/474/249)。三重驗證上線(weken.news HTTP 200 + 內容render)。
+
+## 2026-06-24 廣告群集 4 篇（commit 4e53687 + 18891a1，已上線）
+起點：週末哥傳 /stats 後台截圖問「AI 爬蟲算多還是少」。累積 379、今日 4。分析後定位兩根金柱：廣告/Meta（meta-marketing 單篇 170 次最強）+ Claude Code。決定圍著最強主題補滿子面向組 topic cluster。
+
+4 篇（tag 全掛 meta + facebook-ads，自動跟 170 次主力文歸群）：
+- /articles/meta-ads-interest-tags-venn-boundary-audience：受眾，文氏圖找邊界受眾（OR 堆熱門 vs narrowing AND 交集），綁 wk-meta-analyst 8839 標籤庫工具
+- /articles/meta-ads-creative-hook-ab-test-method：素材，控制變數只換 hook + hook rate/CTR/CPA 三層判讀
+- /articles/meta-ads-abo-vs-cbo-budget-decision：預算，測試期 ABO 放大期 CBO 決策框架 + 測試期用 CBO 的坑
+- /articles/meta-ads-metrics-which-to-watch-daily：判讀，每天只盯 5 指標 + 紅線對齊單位經濟
+
+重要紀律：第 2-4 篇週末哥沒給真實數字，沒杜撰 CPA/花費，依 wk-aeo-writer G7 寫成「方法/決策框架」型（不是假裝實測）。已跟他講明哪天補真實數字可升級成第一手實測版。本機 build 兩次驗過無錯才推。
+
+下一步（等週末哥）：他若丟真實數字（hook CPA 對照 / ABO-CBO 成效 / 實際紅線），把對應篇從框架升級成實測。發節奏建議：週二廣告群集 / 週四 Claude Code / 週六短文。
