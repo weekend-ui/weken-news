@@ -1,12 +1,13 @@
 ---
-title: "Meta Ads MCP 怎麼接 Claude Desktop？實際 URL 是 mcp.meta.com 不是 mcp.facebook.com"
-description: "Meta 在 2026-04-29 開放官方 Meta Ads MCP server beta，免 Developer App 免 marketing API approval 直接接 Claude Desktop。整理 URL 校正（流傳的 mcp.facebook.com/ads 是錯的，實際是 mcp.meta.com）、授權範圍、台灣可不可以用、為什麼業界共識「適合讀不適合寫」、自動微調傷投放成效的陷阱。"
+title: "Meta Ads MCP 怎麼接 Claude Desktop？授權範圍、29 工具、URL 兩個版本的坑"
+description: "Meta 在 2026-04-29 開放官方 Meta Ads MCP server beta，免 Developer App 免 marketing API approval 直接接 Claude Desktop。整理接入 URL 的兩個流傳版本（mcp.facebook.com/ads 跟 mcp.meta.com/ads，2026-07 重查仍無法一槌定音）、授權範圍、29 個工具五大類、台灣可不可以用、為什麼業界共識「適合讀不適合寫」、自動微調傷投放成效的陷阱。"
 pubDate: 2026-05-03
+updatedDate: 2026-07-01
 tags: ["meta-ads", "mcp", "claude-desktop", "facebook-ads", "ai-agent"]
-directAnswer: "Meta Ads MCP 在 2026-04-29 開放 open beta，正確 connector URL 是 https://mcp.meta.com/ads（不是流傳的 mcp.facebook.com/ads）。透過 Meta Business OAuth 授權後系統會 provision 專屬 URL（mcp.meta.com/ads/<your-business-id>），免 Meta Developer App、免 marketing API approval。但 per ad account 逐步開通、寫操作沒原生 guardrails，建議先用讀模式跑分析，寫操作走人工 Ads Manager。"
+directAnswer: "Meta Ads MCP 在 2026-04-29 開放 open beta，接入 connector URL 有兩個版本在流傳（mcp.facebook.com/ads 跟 mcp.meta.com/ads），2026-07 重查仍無法一槌定音，唯一確認法是實際貼進 Claude Desktop 看哪個跳出 OAuth 授權畫面。透過 Meta Business OAuth 授權後系統會 provision 專屬 URL（含 your-business-id），免 Meta Developer App、免 marketing API approval。但 per ad account 逐步開通、寫操作沒原生 guardrails，建議先用讀模式跑分析，寫操作走人工 Ads Manager。"
 faq:
   - question: "Meta Ads MCP 的 URL 是什麼？"
-    answer: "正確 endpoint 是 https://mcp.meta.com/ads，不是社群轉貼常見的 mcp.facebook.com/ads。在 Claude Desktop 加 connector 時填這個 URL，系統會跳出 Meta Business OAuth 授權畫面。授權通過後 Meta 會 provision 一條包含你 business id 的專屬 URL（格式 mcp.meta.com/ads/<your-business-id>），這條才是你後續實際使用的 endpoint。"
+    answer: "目前有兩個版本在流傳：mcp.facebook.com/ads 跟 mcp.meta.com/ads。這篇 2026-05 初版時採信 mcp.meta.com/ads，但 2026-07 重查發現多數第三方教學寫 mcp.facebook.com/ads，兩邊相反，Meta 官方公告頁又沒直接列出完整字串，我沒法一槌定音。最可靠的方法是自己接一次：在 Claude Desktop 加 connector 時兩個都試，哪個跳出 Meta Business OAuth 授權畫面就是對的，填錯會靜默連線失敗。授權通過後 Meta 會 provision 一條含你 business id 的專屬 URL，那條才是後續實際使用的 endpoint。"
   - question: "Meta Ads MCP 跟 Marketing API 差別在哪？"
     answer: "Marketing API 走的是傳統 access token 流程，要建 Meta Developer App、申請 marketing API approval、自己處理 OAuth 跟 token refresh，從申請到通過動輒等幾週。Meta Ads MCP 走 Meta Business OAuth 直接授權三個 scope（ad accounts / campaign management / signal access），不用 Developer App、不用 approval。但 MCP 是 server-side 託管在 Meta，你不是直接拿 token，是讓 AI client 透過 MCP 協定問 Meta。"
   - question: "Meta Ads MCP 在台灣可以用嗎？"
@@ -24,7 +25,9 @@ howToSteps:
     text: "接通後第一個 prompt 不要碰寫操作。建議丟「拉我 Meta 廣告帳號最近 28 天的 ROAS / CPA / 曝光分布報表」這類純讀任務，看它能正確抓哪些帳號的數據。哪些帳號回 unauthorized 就代表還沒輪到開通。寫操作（建廣告、改預算）短期內不要讓 AI 自動跑，等 guardrails 機制成熟。"
 ---
 
-聲明在前面：這篇是研究整理 + URL 校正第一手 + 風險評估，我自己還沒實接過 Meta Ads MCP。Meta 是 per ad account 逐步開放，我手上的廣告帳號還沒輪到。文章寫的是「接之前該知道的事」，不是「我接完發現什麼」。等我實接完會另外寫一篇。
+聲明在前面：這篇是研究整理 + 風險評估，我自己還沒實接過 Meta Ads MCP。Meta 是 per ad account 逐步開放，我手上的廣告帳號還沒輪到。文章寫的是「接之前該知道的事」，不是「我接完發現什麼」。
+
+2026-07-01 更新：這篇初版（2026-05）採信接入 URL 是 mcp.meta.com/ads。7 月重查發現 mcp.facebook.com/ads 這個版本反而被更多第三方教學採用，兩邊相反、我沒法確定哪個對，已把下面的 URL 段落改成兩版本並陳的誠實框架。同時補上官方 MCP 的 29 個工具五大類拆解。細節分別見另兩篇：29 工具怎麼用、URL 兩個版本的完整查證。
 
 事情是這樣，週末哥昨天傳給我一個社群貼文，說「太扯，串接 Meta Ads MCP 就不用花時間申請 token」，貼文裡寫的 URL 是 https://mcp.facebook.com/ads。
 
@@ -40,23 +43,22 @@ URL 看起來太乾淨我就去查。
 
 --
 
-## URL 校正：是 mcp.meta.com 不是 mcp.facebook.com
+## URL 有兩個版本在流傳，我沒法一槌定音
 
-社群轉貼的 mcp.facebook.com/ads 不是真的 endpoint。實際正確 URL 是：
+接入 endpoint 目前有兩個版本在傳，而且相反：
 
 ```
+https://mcp.facebook.com/ads
 https://mcp.meta.com/ads
 ```
 
-更精確說，這條只是「初次接入」的 entry。授權通過後 Meta 會 provision 一條包含你 business id 的專屬 URL：
+這篇 2026-05 初版時，我研究後採信 mcp.meta.com/ads 是對的、facebook 那版是傳錯。但 2026-07 重查，多數第三方設定教學跟工具目錄反而寫 mcp.facebook.com/ads，Meta 官方公告頁又沒在頁面上直接列出完整字串。我沒實接過，沒法確定是舊研究錯、還是 Meta 中途改了、還是新資料互抄錯版本。
 
-```
-https://mcp.meta.com/ads/<your-business-id>
-```
+所以誠實講：查資料這條路我確定不了哪個對。
 
-這條才是你後續實際使用的 endpoint。所以 mcp.facebook.com/ads 為什麼會在社群流傳？我猜是因為 Facebook = Meta 的舊認知 + 大家口頭講方便，但 Meta 自家技術 endpoint 已經統一在 meta.com 域名底下，不再用 facebook.com。
+唯一可靠的方法是自己接一次。在 Claude Desktop 加 connector 時兩個都試，哪個跳出 Meta Business OAuth 授權畫面就是對的。填錯的那個會直接連線失敗，沒有 fallback、也不會給有用的錯誤訊息，就是靜默失敗。
 
-填錯 URL 在 Claude Desktop 會直接連線失敗，沒有 fallback 也不會給有用的錯誤訊息。
+不管哪個域名，有一點兩邊說法一致：你一開始填的只是「初次接入」的 entry，授權通過後 Meta 會 provision 一條包含你 business id 的專屬 URL，那條才是你後續實際使用的 endpoint。
 
 --
 
@@ -71,6 +73,20 @@ OAuth 授權時 Meta 要你同意三個 scope：
 完成後 Meta 直接 provision MCP URL，不用建 Developer App、不用送 marketing API approval。這個流程跟 Shopify、Mailchimp 接 Meta Business 一樣，只是這次是 AI client 接。
 
 對廣告主的意義：你可以在不寫一行 code 的情況下讓 Claude 直接問你 Meta 廣告數據。
+
+--
+
+## 29 個工具，分五大類
+
+官方 MCP 在 beta 開了 29 個工具，五大類：
+
+1. 開活動與改活動，5 個。建 campaign、ad set、ad、編輯、啟用。這類是寫入型，會動到 live 廣告。
+2. 商品目錄，10 個。建目錄、feed 規則、product set、feed 狀態診斷。數量最多，因為電商動態商品廣告全靠 catalog。
+3. 帳號、粉專與資產，3 個。列廣告帳號、列 campaign／ad set／ad、找連接的粉專。基礎讀取。
+4. 資料集與追蹤品質，4 個。像素跟轉換 API 的 dataset、配對品質分數、事件統計、錯誤診斷。查追蹤有沒有掉資料。
+5. 成效洞察與分析，7 個。廣告主脈絡、KPI 異常、競價基準、歷史趨勢、機會分數、Help Center。
+
+判斷上，第四類跟第五類是唯讀、最安全，也最省時間；第一類寫入型 beta 階段先別讓 AI 自動跑。哪些工具對電商最划算，我另一篇專門拆。
 
 --
 
@@ -125,4 +141,4 @@ Meta 演算法越來越 autonomous，最佳實踐是「不要頻繁手動調」�
 
 新發布的 AI 工具看起來越方便，越要先驗證 URL 是否是官方真實 endpoint，再評估能讀能寫到什麼程度，最後才決定怎麼用。
 
-mcp.facebook.com/ads 跟 mcp.meta.com/ads 只差一個域名，但前者連不上、後者是真的。三天內社群已經在轉錯版本，這是 AI 工具發布時典型的資訊差訊號。
+mcp.facebook.com/ads 跟 mcp.meta.com/ads 只差一個域名，但兩個版本現在都在流傳、而且說法相反，連我兩個月前寫的都不敢說一定對。真正能定案的不是查更多資料，是實際接一次看 OAuth 跳不跳。查不出來就老實說查不出來，這比硬押一個版本假裝確定有用。
