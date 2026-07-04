@@ -313,3 +313,10 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 - [ ] **站外提及從 0 到 1（人的工作，最大槓桿）**：脆 @wk.change 貼文帶站上連結雙向導流；挑 meta-marketing-api（已被爬蟲驗證的明星文）投稿/授權轉載給有權重的站；PTT/Dcard/Mobile01 相關討論真實參與；引導鐵粉在 Google 把 weken.news 設為 Preferred Source；每筆提及補進 /citations 頁（schema 已備好）。
 - [ ] 每月滾動更新 3-5 篇舊文（機制見上）
 
+### 下次 session 開機指令（2026-07-04 存檔）
+
+1. 7-14 天後看 /stats：OAI-SearchBot / Claude-SearchBot 有沒有自然流量（目前各 1 是本次部署驗證的測試訪問，不是真爬蟲）。有 = ChatGPT / Claude 檢索端真的在收；持續掛零 = indexing 不夠，回頭看站外提及進度
+2. 問週末哥 Bing Webmaster Tools 驗證做了沒（bing.com/webmasters 用 GSC 匯入）；做了就開 AI Performance 看 Copilot 引用數，這是第一個真正的「被引用」量測來源
+3. 每月滾動更新 3-5 篇舊文 + updatedDate（優先序按爬蟲熱度，見上面機制段）
+4. /citations 頁還是空的就提醒站外提及（本次健檢定調：站外是最大槓桿，82% AI 引用來自 earned media）
+5. IndexNow 已自動化不用管；llms.txt / schema 維持現狀不再投入
