@@ -296,7 +296,7 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 - 爬蟲數據亮點：累積 626 次，ChatGPT-User 303 次（ChatGPT 對話中真的在抓本站頁面），明星文章 meta-marketing-api-personal 單篇 221 次。
 - 2026 關鍵外部事實（已查證）：(a) Ahrefs 實測 5 大 AI 系統即時抓頁全部只讀可見 HTML、不讀 JSON-LD，schema 不用拆但停止加碼；(b) Google 2026-05 停用 FAQ rich result（FAQPage schema 本身仍合法）；(c) llms.txt 97% 網域整月零請求、無平台承諾讀取，維持但不再投入；(d) Bing Webmaster Tools 2026-02 上線 AI Performance（可看 Copilot 引用次數）；(e) Google Preferred Sources 2026-05 擴進 AI Overviews，未來是排序訊號。
 
-### 本次落地（commit 待補）
+### 本次落地（commit 68d8d74，已部署 + 線上驗證通過；首次全量 IndexNow 提交 59 網址 HTTP 202）
 
 1. **middleware.ts 爬蟲追蹤大修**：補檢索型爬蟲 OAI-SearchBot / Claude-SearchBot / Claude-User / Perplexity-User / Bingbot / Meta-ExternalAgent / Applebot-Extended / DuckAssistBot / MistralAI-User / CCBot 等（檢索型 = 「會不會被引用」的前導指標，先前完全看不到）。移除已停用的 anthropic-ai 與傳統搜尋的 Googlebot。/api/* 路徑不再計入（先前 Googlebot 跑 JS 打 /api/track 污染 topPages 第 5 名）。注意：AI_BOTS 是子字串比對取第一命中，特定 pattern 要排前面（Applebot-Extended 在 Applebot 前）。
 2. **api/stats.ts 資料清潔**：輸出過濾 Googlebot 舊 key 與 /api/* 舊頁面 key（Redis 資料保留不刪，只是不顯示）。歷史 total（626 含 Googlebot 93）不回溯修正。
