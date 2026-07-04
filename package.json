@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/indexnow-ping.mjs",
     "preview": "astro preview",
     "postinstall": "node -e \"const fs=require('fs'),p='./node_modules/@astrojs/vercel/dist/serverless/adapter.js';let s=fs.readFileSync(p,'utf8');s=s.replaceAll(\\\"return 'nodejs18.x'\\\",\\\"return 'nodejs20.x'\\\");fs.writeFileSync(p,s);console.log('Patched vercel adapter: nodejs18.x -> nodejs20.x');\""
   },

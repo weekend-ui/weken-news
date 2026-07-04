@@ -2,20 +2,42 @@ import { defineMiddleware } from 'astro:middleware';
 import { Redis } from '@upstash/redis';
 
 // AI crawler User-Agent patterns
+// 子字串比對按插入順序取第一個命中,較特定的 pattern 必須排在較短的前面
+// (如 Applebot-Extended 要在 Applebot 前,否則永遠被 Applebot 吃掉)
+// 2026-07-04 對齊 OpenAI / Anthropic 官方爬蟲清單:
+// 補檢索型爬蟲(OAI-SearchBot / Claude-SearchBot 是「會不會被引用」的前導指標)
+// 移除已停用的 anthropic-ai 與傳統搜尋的 Googlebot(Google 端看 GSC,不混進 AI 統計)
 const AI_BOTS: Record<string, string> = {
-  'GPTBot': 'GPTBot',
+  // OpenAI
+  'OAI-SearchBot': 'OAI-SearchBot',
   'ChatGPT-User': 'ChatGPT',
+  'GPTBot': 'GPTBot',
+  // Anthropic(2026 現行:ClaudeBot 訓練 / Claude-User 對話抓頁 / Claude-SearchBot 檢索)
+  'Claude-SearchBot': 'Claude-SearchBot',
+  'Claude-User': 'Claude-User',
   'ClaudeBot': 'Claude',
-  'anthropic-ai': 'Claude',
+  // Perplexity
+  'Perplexity-User': 'Perplexity-User',
   'PerplexityBot': 'Perplexity',
+  // Google AI
   'Google-Extended': 'Google-Extended',
-  'Googlebot': 'Googlebot',
-  'Amazonbot': 'Amazon',
+  // Bing(索引直接餵 Copilot 與 ChatGPT search)
+  'bingbot': 'Bingbot',
+  // Meta
+  'Meta-ExternalAgent': 'Meta-ExternalAgent',
+  'meta-externalfetcher': 'Meta-ExternalFetcher',
   'FacebookBot': 'Facebook',
+  // Apple
+  'Applebot-Extended': 'Applebot-Extended',
   'Applebot': 'Apple',
+  // 其他
+  'Amazonbot': 'Amazon',
   'Bytespider': 'Bytespider',
   'YouBot': 'YouBot',
   'cohere-ai': 'Cohere',
+  'DuckAssistBot': 'DuckAssist',
+  'MistralAI-User': 'Mistral',
+  'CCBot': 'CCBot',
 };
 
 function detectBot(userAgent: string): string | null {
@@ -38,15 +60,15 @@ function getTaiwanDate(): string {
 export const onRequest = defineMiddleware(async (context, next) => {
   const userAgent = context.request.headers.get('user-agent') || '';
   const botName = detectBot(userAgent);
+  const path = new URL(context.request.url).pathname;
 
-  if (botName) {
+  // /api/* 不是內容頁,不計入(避免會跑 JS 的爬蟲打 /api/track 污染 topPages)
+  if (botName && !path.startsWith('/api/')) {
     try {
       const redis = new Redis({
         url: import.meta.env.UPSTASH_REDIS_REST_URL?.trim(),
         token: import.meta.env.UPSTASH_REDIS_REST_TOKEN?.trim(),
       });
-
-      const path = new URL(context.request.url).pathname;
       const date = getTaiwanDate();
 
       // Fire all increments in parallel

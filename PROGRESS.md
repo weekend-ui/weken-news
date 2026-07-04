@@ -1,6 +1,6 @@
 # weken.news — PROGRESS
 
-> 最後更新：2026-06-24｜階段：新增廣告群集 4 篇（commit 4e53687 / 18891a1）— 用後台爬蟲數據定位「廣告/Meta」為最強主題，圍著它補滿受眾/素材/預算/判讀四面向組成 topic cluster
+> 最後更新：2026-07-04｜階段：全站 AEO 深度健檢後落地三件事 — 爬蟲追蹤補檢索型 bot（OAI-SearchBot 等）、IndexNow 上線、robots.txt 對齊 2026 現行爬蟲名。詳見文末 2026-07-04 段
 
 ## 2026-06-01 wk-ads 整合
 BaseLayout 加 footer 上方 announcement bar，client-side fetch `https://wk-ads.vercel.app/api/current` 拿廣告 JSON。
@@ -145,7 +145,7 @@ ad.active=false 或 fetch 失敗自動隱藏，不影響其他內容渲染。
 - @astrojs/sitemap 3.7.x 與 Astro 4.16.x 在某些設定下有 reduce undefined 錯誤，已改用手動 sitemap.xml endpoint
 - @astrojs/vercel@7.8.2 在 Node 24 本機環境下 fallback 到 nodejs18.x（EOL），已用 postinstall 腳本強制 patch 為 nodejs20.x
 - Vercel env var 透過 Windows 貼上時可能有 trailing \\n，已在程式碼加 .trim() 防禦
-- **og-default.png 與 logo.png 不存在於 public/**：BaseLayout 預設 ogImage = '/og-default.png'，logo 位置也引用 /logo.png，但 public/ 只有 llms.txt 和 robots.txt。分享到社群時 og 圖會 404，logo 也載不出。修法：放兩張圖到 public/，或用 dynamic OG image generator（Astro 有 satori 整合）。
+- ~~og-default.png 與 logo.png 不存在於 public/~~：已解決，兩張圖都在 public/（2026-07-04 健檢確認存在）。剩餘可選優化：每篇文章共用同一張 og-default，之後可考慮 per-article OG image（satori 動態生成）。
 - **DNS 設錯**：之前 A record 加在 Namecheap Advanced DNS 但 parking 機制覆蓋。修法見「進行中」第一項。
 
 ## 重要決策
@@ -285,3 +285,31 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 - repo weekend-ui/weken-news 是「公開」的：任何 secret 不能寫進 code，一律走 Vercel env。
 
 下一步（等週末哥）：訪客數據累積後，可考慮做 API 定期把真人流量報到 TG（他提過「都你來處理」），讓他連 Vercel/stats 頁都不用開。
+
+## 2026-07-04 全站 AEO 深度健檢 + 三項技術落地
+
+起點：週末哥要求「讀 AEO 網站記憶 + 完整分析評估 + 深入研究找優化點」。兩隻研究 agent 查證 2026 上半年 AEO 趨勢 + 中文市場格局，逐檔審完站內程式碼後落地。
+
+### 健檢結論（完整版見當次 session）
+
+- 站內技術面接近滿分，天花板在站外：搜尋引擎上 weken.news 第三方提及為零、citations 頁空、4 個主打題目（Meta 廣告受眾/Marketing API/Claude Code 中文/AEO 是什麼）前排全是代理商部落格與獨立部落客。Muck Rack 2026 研究：82% AI 引用來自 earned media。
+- 爬蟲數據亮點：累積 626 次，ChatGPT-User 303 次（ChatGPT 對話中真的在抓本站頁面），明星文章 meta-marketing-api-personal 單篇 221 次。
+- 2026 關鍵外部事實（已查證）：(a) Ahrefs 實測 5 大 AI 系統即時抓頁全部只讀可見 HTML、不讀 JSON-LD，schema 不用拆但停止加碼；(b) Google 2026-05 停用 FAQ rich result（FAQPage schema 本身仍合法）；(c) llms.txt 97% 網域整月零請求、無平台承諾讀取，維持但不再投入；(d) Bing Webmaster Tools 2026-02 上線 AI Performance（可看 Copilot 引用次數）；(e) Google Preferred Sources 2026-05 擴進 AI Overviews，未來是排序訊號。
+
+### 本次落地（commit 待補）
+
+1. **middleware.ts 爬蟲追蹤大修**：補檢索型爬蟲 OAI-SearchBot / Claude-SearchBot / Claude-User / Perplexity-User / Bingbot / Meta-ExternalAgent / Applebot-Extended / DuckAssistBot / MistralAI-User / CCBot 等（檢索型 = 「會不會被引用」的前導指標，先前完全看不到）。移除已停用的 anthropic-ai 與傳統搜尋的 Googlebot。/api/* 路徑不再計入（先前 Googlebot 跑 JS 打 /api/track 污染 topPages 第 5 名）。注意：AI_BOTS 是子字串比對取第一命中，特定 pattern 要排前面（Applebot-Extended 在 Applebot 前）。
+2. **api/stats.ts 資料清潔**：輸出過濾 Googlebot 舊 key 與 /api/* 舊頁面 key（Redis 資料保留不刪，只是不顯示）。歷史 total（626 含 Googlebot 93）不回溯修正。
+3. **robots.txt**：Anthropic 段換成現行三隻（ClaudeBot / Claude-User / Claude-SearchBot，移除停用的 Claude-Web / anthropic-ai），補 Bingbot 段。
+4. **IndexNow 上線**：public/a793843a28977d86cc89fa35024e2d66.txt（key 檔，IndexNow 協定本來就要求公開）+ scripts/indexnow-ping.mjs（production build 後自動提交近 10 天新文章給 api.indexnow.org；手動全量：node scripts/indexnow-ping.mjs --all）。掛在 package.json build script。任何失敗不擋 build。
+
+### 舊文滾動更新機制（新增紀律）
+
+57 篇只有 1 篇有 updatedDate，27 篇 4 月文已滿兩個半月。每月挑 3-5 篇舊文補新數據 + 加 updatedDate（sitemap / Article schema / llms-full 都會自動吃到）。優先順序按 /stats 爬蟲熱度：meta-marketing-api 兩篇 > vercel-labs-skills > claude-code-routines > gemini-thinking-config。內文寫作紀律追加：新文順手帶 1-2 條內文脈絡互連（目前 57 篇只有 1 篇有），重要數據引外部來源（KDD 2024 GEO 研究：引來源 +40%、引言 +115%）。
+
+## 進行中（2026-07-04 新增）
+
+- [ ] **Bing Webmaster Tools 驗證（只有週末哥能做，10 分鐘）**：用 Microsoft 帳號登入 https://www.bing.com/webmasters → 選「從 GSC 匯入」一鍵搬（GSC 已驗證過）→ 開 AI Performance 看 Copilot 引用數據。IndexNow 不用等這步，已獨立生效。
+- [ ] **站外提及從 0 到 1（人的工作，最大槓桿）**：脆 @wk.change 貼文帶站上連結雙向導流；挑 meta-marketing-api（已被爬蟲驗證的明星文）投稿/授權轉載給有權重的站；PTT/Dcard/Mobile01 相關討論真實參與；引導鐵粉在 Google 把 weken.news 設為 Preferred Source；每筆提及補進 /citations 頁（schema 已備好）。
+- [ ] 每月滾動更新 3-5 篇舊文（機制見上）
+

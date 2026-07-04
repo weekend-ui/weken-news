@@ -1,6 +1,6 @@
 # weken.news robots.txt
 # AEO-optimized: explicitly allow all major AI crawlers
-# Last updated: 2026-05-04
+# Last updated: 2026-07-04 (Anthropic 爬蟲名對齊現行三隻、補 Bingbot)
 
 User-agent: *
 Allow: /
@@ -15,14 +15,14 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-# Anthropic
+# Anthropic (2026 現行:訓練 / 對話抓頁 / 檢索)
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: Claude-Web
+User-agent: Claude-User
 Allow: /
 
-User-agent: anthropic-ai
+User-agent: Claude-SearchBot
 Allow: /
 
 # Perplexity
@@ -77,6 +77,10 @@ Allow: /
 
 # Diffbot
 User-agent: Diffbot
+Allow: /
+
+# Microsoft Bing (索引餵 Copilot 與 ChatGPT search)
+User-agent: Bingbot
 Allow: /
 
 # DuckDuckGo

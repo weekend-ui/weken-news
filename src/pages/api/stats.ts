@@ -34,6 +34,8 @@ export const GET: APIRoute = async ({ url }) => {
       const botCounts = await Promise.all(botKeys.map(k => redis.get<number>(k)));
       botKeys.forEach((key, i) => {
         const name = key.replace('wkn:ai:bot:', '');
+        // Googlebot 是傳統搜尋爬蟲,2026-07-04 起不再計入;Redis 舊 key 保留但不顯示
+        if (name === 'Googlebot') return;
         bots[name] = botCounts[i] || 0;
       });
     }
@@ -45,6 +47,8 @@ export const GET: APIRoute = async ({ url }) => {
       const pageCounts = await Promise.all(pageKeys.map(k => redis.get<number>(k)));
       pageKeys.forEach((key, i) => {
         const path = key.replace('wkn:ai:page:', '');
+        // /api/* 非內容頁(舊資料有 Googlebot 打 /api/track 的殘留),不顯示
+        if (path.startsWith('/api/')) return;
         pages[path] = pageCounts[i] || 0;
       });
     }
