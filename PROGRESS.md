@@ -320,3 +320,5 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 3. 每月滾動更新 3-5 篇舊文 + updatedDate（優先序按爬蟲熱度，見上面機制段）
 4. /citations 頁還是空的就提醒站外提及（本次健檢定調：站外是最大槓桿，82% AI 引用來自 earned media）
 5. IndexNow 已自動化不用管；llms.txt / schema 維持現狀不再投入
+- 2026-07-15 新增文章 claude-code-windows-optimization-firsthand(Claude Code 優化 Windows 電腦一手實測,健檢分 17→75),commit 7842d6e
+- 2026-07-16 新增文章 taiwan-ecommerce-traffic-vs-financials(酷澎 vs momo:用經濟部官方統計與 Coupang/momo 財報推翻「用網站流量榜判斷電商勝負」)。研究型非實測,第一手立足點是週末哥廣告代操視角(流量與成交的落差)。核心數據:2025 電子購物業年增 3.4%(經濟部 2026-02-05)、Coupang Developing Offerings 單季 EBITDA 虧 3.29 億美元全年預估 9.5-10 億、momo 2024Q2 毛利率 9.11% 年減 0.84pt(財訊,兩年前資料已標明)
