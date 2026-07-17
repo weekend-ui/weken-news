@@ -322,3 +322,4 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 5. IndexNow 已自動化不用管；llms.txt / schema 維持現狀不再投入
 - 2026-07-15 新增文章 claude-code-windows-optimization-firsthand(Claude Code 優化 Windows 電腦一手實測,健檢分 17→75),commit 7842d6e
 - 2026-07-16 新增文章 taiwan-ecommerce-traffic-vs-financials(酷澎 vs momo:用經濟部官方統計與 Coupang/momo 財報推翻「用網站流量榜判斷電商勝負」)。研究型非實測,第一手立足點是週末哥廣告代操視角(流量與成交的落差)。核心數據:2025 電子購物業年增 3.4%(經濟部 2026-02-05)、Coupang Developing Offerings 單季 EBITDA 虧 3.29 億美元全年預估 9.5-10 億、momo 2024Q2 毛利率 9.11% 年減 0.84pt(財訊,兩年前資料已標明)
+- 2026-07-17 新增文章 agent-self-improvement-context-vs-harness(Letta Mods 對照週末哥手工分層記憶系統:context 學習 vs harness 學習)。第一手立足點是他自己的 Claude Code 分層指令/記憶系統(真實存在),Letta 為研究對照非實測。核心洞見:反覆失效的規則卡在 context 層靠記憶不可靠,要換到 harness 層做成 hook 讓系統自動執行。誠實標 Letta 非突破(自承靈感來自 Pi 擴充+Meta-Harness,Letta=MemGPT 團隊已查證)。未曝私人 setup 細節(persona/觸發詞/TG)
