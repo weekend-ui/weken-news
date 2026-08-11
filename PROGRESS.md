@@ -1,5 +1,11 @@
 # weken.news — PROGRESS
 
+> 最後更新：2026-08-12｜階段：第 84 篇上線（Ahrefs 原始數據拆解 AEO），站上首次做「回頭挖原始研究對照二手轉述」這種題型
+>
+> 2026-08-12 新增 `ahrefs-aeo-word-count-brand-mentions-data.md`。題材來源是週末哥收到一篇整理 Sam Oh / Ahrefs AEO 課程的中文貼文，
+> 要求先研究驗證再寫。做法是不轉述那篇，而是回去挖 Ahrefs 原始研究把係數與樣本數抓出來對照。
+> **這個題型可以複製**：中文圈大量 AEO / AI 內容都停在轉述結論，回頭查原始樣本數與係數就是現成的差異點。詳見文末 2026-08-12 段。
+>
 > 最後更新：2026-07-04｜階段：全站 AEO 深度健檢後落地三件事 — 爬蟲追蹤補檢索型 bot（OAI-SearchBot 等）、IndexNow 上線、robots.txt 對齊 2026 現行爬蟲名。詳見文末 2026-07-04 段
 
 ## 2026-06-01 wk-ads 整合
@@ -324,3 +330,40 @@ Notion：私人 stats 網址已加進 AI 專用 → WeKen 工具網址清單 →
 - 2026-07-16 新增文章 taiwan-ecommerce-traffic-vs-financials(酷澎 vs momo:用經濟部官方統計與 Coupang/momo 財報推翻「用網站流量榜判斷電商勝負」)。研究型非實測,第一手立足點是週末哥廣告代操視角(流量與成交的落差)。核心數據:2025 電子購物業年增 3.4%(經濟部 2026-02-05)、Coupang Developing Offerings 單季 EBITDA 虧 3.29 億美元全年預估 9.5-10 億、momo 2024Q2 毛利率 9.11% 年減 0.84pt(財訊,兩年前資料已標明)
 - 2026-07-17 新增文章 agent-self-improvement-context-vs-harness(Letta Mods 對照週末哥手工分層記憶系統:context 學習 vs harness 學習)。第一手立足點是他自己的 Claude Code 分層指令/記憶系統(真實存在),Letta 為研究對照非實測。核心洞見:反覆失效的規則卡在 context 層靠記憶不可靠,要換到 harness 層做成 hook 讓系統自動執行。誠實標 Letta 非突破(自承靈感來自 Pi 擴充+Meta-Harness,Letta=MemGPT 團隊已查證)。未曝私人 setup 細節(persona/觸發詞/TG)
 - 2026-07-17 新增文章 ecommerce-aeo-seo-roi-ads-first(用 AEO/SEO 幫電商導購能賺錢嗎:結論先用廣告)。反共識數據型:AI 流量佔 0.3% 轉換高但量小、Google 2026/03 砍量產內容 60-90%、廣告抓創造需求 vs SEO 抓已存在需求、先廣告後 SEO 只養贏家。研究+第一手(週末哥跑 AEO 站+投廣告),非杜撰銷售數字。未曝具體商品(蕭泌密/蕭風飲)與快電商。今天下午整段 AEO 電商對話的結晶
+- 2026-08-06 新增文章 palmier-pro-vs-ffmpeg-claude-video-editing-two-paths(Palmier Pro 研究:Claude 剪片的兩條路,MCP 時間軸式 vs FFmpeg 燒錄式)。研究型非實測,因為 Palmier 只跑 macOS 26 加 Apple 晶片,週末哥主力是 Windows 裝不了,全文明講沒有實跑畫面。第一手立足點是自己那條 FFmpeg + Whisper 剪片線的對照。數字全部當天實查 GitHub API:13109 星、978 fork、MCP 服務跑 19789 埠、Pro 29 美金 Max 69 美金。釘死兩個網路誤傳:只支援 macOS、沒有外掛系統(所謂「叫 Claude 寫外掛」實際是改 GPLv3 原始碼重編譯,要長期養私家分支)。驗收:build 過、線上 200、GEO 引用區塊 2 塊、FAQ schema 生效、375 與 320 截圖實際打開看過、320 橫向溢出 0 個元素。commit b435b79(commit 標題誤帶一個 @ 字元,Bash 工具是 Git Bash 卻用了 PowerShell here-string 語法,純外觀未修)
+
+## 2026-08-12 第 84 篇：Ahrefs 原始數據拆解 AEO（commit 932ea6a）
+
+**檔案**：`src/content/articles/ahrefs-aeo-word-count-brand-mentions-data.md`
+**網址**：https://weken.news/articles/ahrefs-aeo-word-count-brand-mentions-data
+
+**題材怎麼來的**：週末哥收到一篇整理 Ahrefs AEO 研究的中文貼文，說「研究這篇內容」。
+那篇品質算好（作者自己有寫「這是相關不是因果」），但整篇沒有一個數字，全是「相關性很高」這種講法。
+所以文章的角度定成：不轉述它，回去挖 Ahrefs 原始研究，把係數與樣本數抓出來對照。
+
+**文章裡用到的數字（全部可回溯，之後要引用直接抄這裡）**
+
+| 主張 | 數字 | 樣本 | 來源等級 |
+|---|---|---|---|
+| 字數與被引用無關 | Spearman 0.04 | 174,048 頁（自 560,346 則 AI Overview、1,677,876 個引用網址） | Ahrefs 一手 |
+| 被引用頁面偏短 | 53.4% 不到 1000 字；平均 1282、中位數 1115 | 同上 | Ahrefs 一手 |
+| 品牌訊號 > 反向連結 | YouTube 提及 0.737、品牌網路提及 0.656-0.709、品牌錨點 0.511-0.628、品牌搜尋量 0.352-0.466、反向連結 0.194-0.3 | 75,000 個品牌 | Ahrefs 一手 |
+| query fan-out 存在 | 原句「issuing multiple related searches across subtopics and data sources」 | Google 開發者文件 | Google 官方一手 |
+| 前十名紅利消失 | 76%（2025-07，190 萬引用）→ 38%（2026-01，400 萬網址、863,000 關鍵字） | Ahrefs 兩次研究 | Ahrefs 一手 |
+
+**刻意沒放進文章的**：OpenAI 用超過一百萬小時 YouTube 逐字稿訓練 GPT-4。這條只有媒體報導，
+沒有官方承認，照 gotchas G6（訓練知識與媒體印象不等於有來源的事實）拿掉。
+
+**這篇的差異化是三層，不是一層**
+1. 附原始係數與樣本數，不是只講「相關性很高」
+2. 一手二手分開標，Google 官方寫的跟媒體報導的不混在一起
+3. 主動指出這批研究的方法學問題：品牌大小是沒被控制的共同原因，
+   大品牌本來就到處被提到也本來就容易被 AI 提到。這段有標明是自己的推論。
+
+**交付檢查（都跑過）**：em dash 0、星號 0、`--` 分段 7 處、`---` 只有 frontmatter 上下 2 處、
+無 CTA 結尾、description 125 字、FAQ 5 題、HowTo 3 步、GEO 引用區塊 3 個、
+所有數字在 frontmatter 與正文交叉一致、`npm run build` 通過、
+線上 200 並確認 FAQPage / HowTo / Article / BreadcrumbList / SpeakableSpecification 全部渲染、手機版無溢出。
+
+**下次可複製的題型**：中文圈大量 AEO / AI 工具內容都停在轉述國外結論。
+回頭挖原始研究的樣本數與係數，再加一段方法學批評，就是現成的差異點，而且那些數字都公開在對方部落格上。
