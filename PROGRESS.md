@@ -14,6 +14,66 @@ BaseLayout 加 footer 上方 announcement bar，client-side fetch `https://wk-ad
 img 包進 `<a>` 跟 CTA 同個 wk-ads /api/click?src=weken-news 跳轉 URL，雙入口都計數。
 ad.active=false 或 fetch 失敗自動隱藏，不影響其他內容渲染。
 
+## 2026-08-15 新增 /glossary 術語表（DefinedTermSet）
+
+題材來源：週末哥丟 hogiah.com（台灣 GEO/AEO 監控平台）要我拆解值得學什麼。
+拆出來最值得抄的一項就是術語表用 DefinedTermSet 結構化資料搶定義題。
+
+**做了什麼**
+- 新增 `src/pages/glossary.astro`，19 條術語分三類（AEO 8 / AI 代理 7 / Meta 廣告 4）
+- `DefinedTermSet` schema，每個 `DefinedTerm` 掛 `subjectOf` 指向站內對應文章
+- 已註冊進 `src/pages/sitemap.xml.ts` 與 `public/llms.txt` 重要頁面清單
+
+**跟一般術語表的差別（這是這頁的定位）**
+每條除了定義，多一段「我實際做過什麼」加一個站內文章連結。
+頁面上明寫收詞標準：站內沒有第一手文章支撐的詞就不收。
+所以它不是字典，是可以往下追的索引，而且天然形成內部連結網。
+
+**維護規則（重要）**
+新增詞條時，`slug` 必須指向真實存在的文章。加完務必逐一掃回傳碼，非 200 就修，理由見下一節 hogiah 的教訓。
+
+    for s in <slug 列表>; do curl -s -o /dev/null -w "%{http_code} $s\n" "https://weken.news/articles/$s"; done
+
+**版面踩過的坑**
+分類鈕原本在 375px 排成 [1,2]、320px 排成 [2,1]，兩個尺寸都有孤兒。
+解法是把 chip 標籤縮短（`label` 給區塊標題用，另加 `short` 給 chip 用），
+再加 `max-[374px]:px-2.5` 與 `max-[374px]:gap-1.5`。現在兩個尺寸都是一行三顆。
+
+## 2026-08-15 全站回傳碼健檢（第一次做）
+
+起因是拆解 hogiah 時發現他們 15 篇部落格文章全部 HTTP 500，
+但列表頁與 sitemap 都正常，所以從外面看不出來。一家賣「讓 AI 找得到你」的公司，
+自己的教學文章 AI 抓不到。
+
+**weken.news 的結果：sitemap 99 個網址全部 200，零問題。**
+
+其他 37 個站台掃出 6 個非 200，已分辨為：
+- 根目錄沒放首頁但子路徑正常：wk-qa-bot（/toy、/leaderboard、/api/webhook 都 200）
+- 可能真的掛了、等週末哥確認：wk-vp-assets、wk-goffee-assets、wk-jhm-assets、wk-ai-news
+- 刻意鎖的：wk-myc-proposal（Vercel 密碼保護 401）
+
+**建議常態化**：每週跑一次 sitemap 全網址回傳碼，非 200 發 TG。
+週末哥 2026-08-15 說「先不用管，記起來就好」，尚未排程。
+
+## 2026-08-15 待辦：hogiah 拆解要寫成文章（尚未動筆）
+
+週末哥當天指示「寫 aeo 文章寫完直接 push」，但接著喊存檔，所以這篇還沒寫。
+**下次開機第一件事就是這個。**
+
+素材已備齊，全部是我自己實測的一手數據：
+- hogiah 15 篇部落格文章全部 HTTP 500（抽測 6 篇：what-is-geo、geo-vs-seo-vs-aeo、
+  what-is-aeo、what-is-llms-txt、hogiah-vs-profound、taiwan-ai-visibility-report-2026）
+- 對照組全部 200：首頁、部落格列表、術語表、訂價、9 個產業頁、學院、更新紀錄
+- 他們的 llms.txt 過期：檔案寫 Starter 1,490 / Growth 4,990 / Pro 12,900 與「8 大引擎」，
+  實際訂價頁是 1,080 / 3,280 / 12,800，首頁寫「最多 6 大引擎」
+- 他們值得學的五件事：DefinedTermSet 術語表、產業頁 H2 全用問句加 FAQPage、
+  一模板長 10 產業頁、robots.txt 逐一 Allow 八種 AI 爬蟲、寫自己對競品的比較文
+- 全站僅 76 個 URL（部落格 15、產業頁 10、學院 9）
+
+角度建議：不是評測別人，是「我照他們的做法做了一遍，順便發現他們自己壞了」。
+本站的 /glossary 就是照這次拆解做出來的，可以當內文的實作證據。
+寫作走 wk-aeo-writer skill。
+
 ## 專案概要
 週末哥個人品牌 AEO 站，記錄第一手數據（廣告/自媒體/AI自動化），建立 AI 引用權威。
 技術：Astro + Vercel | 域名：weken.news（Namecheap）

@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteURL = 'https://weken.news';
+
+// 術語表。每一條都必須連到站內一篇「我自己實際做過」的文章，
+// 沒有第一手文章支撐的詞就不收，否則這頁會變成抄定義的詞典，跟這個站的定位相反。
+const groups = [
+  {
+    key: 'aeo',
+    label: 'AEO 與 AI 搜尋',
+    short: 'AEO',
+    terms: [
+      {
+        term: 'AEO（答案引擎優化）',
+        en: 'Answer Engine Optimization',
+        def: '讓內容成為 AI 直接回答問題時所引用的來源，而不是讓網頁排進搜尋結果第幾名。核心差別是：SEO 爭排名，AEO 爭「被寫進答案裡」。',
+        mine: '這個站從零開始就是照 AEO 蓋的，不是先做 SEO 再改。',
+        slug: 'aeo-from-zero',
+      },
+      {
+        term: 'GEO（生成式引擎優化）',
+        en: 'Generative Engine Optimization',
+        def: 'AEO 的上位概念，涵蓋所有生成式 AI 介面裡的品牌能見度，包含被描述、被引用、被推薦三件事。實務上跟 AEO 高度重疊，差別在 GEO 更強調「AI 怎麼描述你」而不只是「有沒有引用你」。',
+        mine: '我實測過台灣的 GEO 平台，發現他們自己的教學文章全部回傳 500。',
+        slug: 'aeo-competitor-analysis',
+      },
+      {
+        term: '被爬取 vs 被引用',
+        en: 'Crawled vs Cited',
+        def: '兩件不同的事。AI 爬蟲來過你的網站叫被爬取，AI 在回答裡把你當來源叫被引用。被爬取是必要條件，不是充分條件。',
+        mine: '我拆過這兩個數字的落差，爬蟲來很多次不代表會引用。',
+        slug: 'aeo-crawled-vs-cited',
+      },
+      {
+        term: 'llms.txt',
+        en: 'llms.txt',
+        def: '放在網站根目錄、專門寫給 AI 讀的純文字檔，用結構化的方式說明「這個站是什麼、有哪些重要頁面、作者是誰」。它不是 robots.txt 的替代品，robots 管能不能爬，llms.txt 管爬到之後怎麼理解。',
+        mine: '重點是它會過期。價格或功能一改就要同步，否則它會變成一個穩定散播錯誤資訊的來源。',
+        slug: 'public-aeo-dashboard-design',
+      },
+      {
+        term: 'AI 爬蟲',
+        en: 'AI Crawler',
+        def: 'GPTBot、ClaudeBot、PerplexityBot、Google-Extended 這類專門為 AI 訓練或即時檢索而來的爬蟲。跟 Googlebot 是不同的東西，要在 robots.txt 分別處理。',
+        mine: '我在站上做了 13 種 AI 爬蟲的到訪即時統計，公開給任何人看。',
+        slug: 'ai-crawler-tracker',
+      },
+      {
+        term: '語意空缺',
+        en: 'Semantic Gap',
+        def: '有人在問、但現有內容沒有人好好回答的題目。找語意空缺比搶熱門關鍵字有效，因為熱門題的答案早就飽和了。',
+        mine: '我做了一個工具，輸入主題自動掃 30 個語意鄰居，標出沒人填的縫。',
+        slug: 'seizen-seiri-chinese-aeo-gap-research',
+      },
+      {
+        term: '需求驗證先於策略',
+        en: 'Demand Verification',
+        def: '寫任何內容之前先確認「真的有人在問這個」。判斷依據要來自工具回吐的資料，不是自己想出來的關鍵字。',
+        mine: '我自己因為憑感覺想關鍵字，同一天推翻過三次自己的結論。',
+        slug: 'aeo-keyword-demand-verification-before-strategy',
+      },
+      {
+        term: 'AEO 的投報順序',
+        en: 'AEO ROI Ordering',
+        def: '對電商而言，AEO 不是最優先的事。有現金流壓力時廣告先跑，AEO 是複利型投資，該做但不該擋在營收前面。',
+        mine: '我把這個順序寫清楚，因為問我的人常常搞反。',
+        slug: 'ecommerce-aeo-seo-roi-ads-first',
+      },
+    ],
+  },
+  {
+    key: 'agent',
+    label: 'AI 代理與 Claude Code',
+    short: 'AI 代理',
+    terms: [
+      {
+        term: 'Context Engineering',
+        en: 'Context Engineering',
+        def: '設計「模型每次工作時看得到什麼」的工程。跟寫 prompt 不同，prompt 是單次的說法，context engineering 是決定哪些規則常載、哪些按需載入、哪些根本不進 context。',
+        mine: '我把規則跟記憶分開，因為它們的載入時機不一樣。',
+        slug: 'claude-code-context-bloat-rules-not-memory',
+      },
+      {
+        term: 'Harness 與 Context 的差別',
+        en: 'Harness vs Context',
+        def: 'Context 是模型讀得到的內容，Harness 是模型跑在裡面的機制（hook、腳本、流程）。規則反覆失效時，正解通常是改 harness 不是把規則寫得更詳細。',
+        mine: '同一條規則我寫過三次還是漏，搬進 harness 之後就沒再漏過。',
+        slug: 'agent-self-improvement-context-vs-harness',
+      },
+      {
+        term: 'MEMORY 架構',
+        en: 'Memory Architecture',
+        def: '把長期記憶拆成薄索引加按需載入的主題檔，而不是全部塞進一個常載的大檔。判準是「什麼時候需要」，不是「多重要」。',
+        mine: '重構後主檔索引少 56%，內容檔反而多 63%，全程沒有靠腳本維持。',
+        slug: 'claude-code-memory-architecture-5-rounds-deep-dive',
+      },
+      {
+        term: 'Skill',
+        en: 'Skill',
+        def: '把會重複做的多步驟流程寫成可被叫用的檔案。判準是同一件事會不會再做第二次，會就寫成 skill，不要每次重講。',
+        mine: '我照 Matt Pocock 的拆法對照自己的六層架構，挖出可以抄的部分。',
+        slug: 'claude-code-skill-writing-matt-pocock-6-layer',
+      },
+      {
+        term: 'MCP',
+        en: 'Model Context Protocol',
+        def: '讓 AI 直接呼叫外部工具與資料的協定。跟官方 CLI 的差別是 MCP 把工具描述餵進 context，好處是模型自己知道怎麼用，代價是佔 context。',
+        mine: '我實測過 Meta 廣告 MCP 的 29 個工具怎麼分類使用。',
+        slug: 'meta-ads-mcp-29-tools-five-categories-ecommerce',
+      },
+      {
+        term: 'Vibe Coding',
+        en: 'Vibe Coding',
+        def: '不寫程式碼、用自然語言把想要的東西描述給 AI 做出來的開發方式。適合工具型與內容型專案，不適合需要嚴謹正確性的系統。',
+        mine: '我記錄了 90 分鐘做出真實可用工具的完整過程，含卡關的地方。',
+        slug: 'vibe-coding-beginner-real-cases-90min',
+      },
+      {
+        term: 'Token 成本',
+        en: 'Token Cost',
+        def: 'AI 讀寫文字的計價單位。優化的重點不是少講話，是別讓模型重複讀同樣的東西。',
+        mine: '我實測過用預先建好的程式碼索引取代反覆讀檔，省下的 token 數字有貼出來。',
+        slug: 'claude-code-codegraph-token-savings-test',
+      },
+    ],
+  },
+  {
+    key: 'ads',
+    label: 'Meta 廣告',
+    short: 'Meta 廣告',
+    terms: [
+      {
+        term: 'ROAS',
+        en: 'Return on Ad Spend',
+        def: '廣告帶來的營收除以廣告花費。要判斷賺不賺錢必須跟毛利率算出來的損益兩平點比，不是跟別人的數字比。',
+        mine: '我算過毛利 33% 的損益兩平是 3.0，低於這個數字的月份就是在虧。',
+        slug: 'meta-ads-metrics-which-to-watch-daily',
+      },
+      {
+        term: 'ABO 與 CBO',
+        en: 'Ad Set vs Campaign Budget Optimization',
+        def: 'ABO 是預算下在廣告組，每組拿到固定的錢；CBO 是預算下在活動，由系統分配。要公平測不同產品用 ABO，要系統找最佳解用 CBO。',
+        mine: '我寫過什麼情況該用哪一個，以及只用 CBO 會漏掉哪些有潛力的產品線。',
+        slug: 'meta-ads-abo-vs-cbo-budget-decision',
+      },
+      {
+        term: '興趣標籤的邊界受眾',
+        en: 'Interest Tag Boundary Audience',
+        def: '兩個興趣標籤重疊的那一塊人。交集的人通常比單一標籤更精準，但要注意重疊太多會讓不同廣告組互相競價。',
+        mine: '我用范恩圖的方式拆過標籤之間的邊界，避免自己跟自己搶量。',
+        slug: 'meta-ads-interest-tags-venn-boundary-audience',
+      },
+      {
+        term: '全期平均的陷阱',
+        en: 'Lifetime Average Trap',
+        def: '把很長一段時間的數字平均起來看，會把季節性的崩塌整個蓋掉。判斷一條產品線該不該加碼要看分月，不能看全期。',
+        mine: '我曾經用全期 ROAS 6.22 建議加碼，分月一看七月 2.20、八月 1.50，都在虧。',
+        slug: 'meta-ads-metrics-which-to-watch-daily',
+      },
+    ],
+  },
+];
+
+const flat = groups.flatMap(g => g.terms);
+
+const glossarySchema = {
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTermSet',
+  '@id': `${siteURL}/glossary#termset`,
+  name: 'weken.news 術語表',
+  description:
+    'AEO、AI 代理、Meta 廣告的繁體中文術語定義。每一條都連到週末哥自己實際操作過的第一手記錄。',
+  inLanguage: 'zh-Hant-TW',
+  url: `${siteURL}/glossary`,
+  hasDefinedTerm: flat.map(t => ({
+    '@type': 'DefinedTerm',
+    '@id': `${siteURL}/glossary#${encodeURIComponent(t.en.toLowerCase().replace(/\s+/g, '-'))}`,
+    name: t.term,
+    alternateName: t.en,
+    description: t.def,
+    inDefinedTermSet: { '@id': `${siteURL}/glossary#termset` },
+    subjectOf: { '@type': 'Article', url: `${siteURL}/articles/${t.slug}` },
+  })),
+};
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': `${siteURL}/glossary#webpage`,
+  name: 'AEO / AI 代理 / Meta 廣告 術語表',
+  description: '繁體中文術語定義，每一條都有第一手文章支撐。',
+  about: { '@id': `${siteURL}/#person` },
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['#glossary-intro'],
+  },
+};
+
+const anchor = (en: string) => en.toLowerCase().replace(/\s+/g, '-');
+---
+
+<BaseLayout
+  title="術語表"
+  description="AEO、GEO、llms.txt、Context Engineering、ABO/CBO 等術語的繁體中文定義。每一條都連到週末哥自己實際操作過的第一手記錄，不是抄來的字典。"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(glossarySchema)} />
+
+  <article>
+    <h1 class="text-3xl font-bold mb-4">術語表</h1>
+    <p id="glossary-intro" class="text-gray-600 leading-relaxed mb-8 max-w-2xl">
+      AEO、AI 代理、Meta 廣告的繁體中文術語定義，共 {flat.length} 條。
+      <strong class="text-gray-900">每一條都連到我自己實際做過的記錄</strong>，
+      沒有第一手文章支撐的詞就不收。所以這不是一份抄來的字典，是一份可以往下追的索引。
+    </p>
+
+    <!-- 分類跳轉 -->
+    <nav class="flex flex-wrap gap-2 max-[374px]:gap-1.5 mb-12">
+      {groups.map(g => (
+        <a
+          href={`#${g.key}`}
+          class="inline-flex items-center gap-2 max-[374px]:gap-1 border border-gray-200 rounded-full px-4 max-[374px]:px-2.5 py-2 text-sm font-bold text-gray-700 hover:border-[#F5C518] hover:bg-yellow-50/40 transition"
+        >
+          {g.short}
+          <span class="font-mono text-xs text-gray-400">{g.terms.length}</span>
+        </a>
+      ))}
+    </nav>
+
+    {groups.map(g => (
+      <section id={g.key} class="mb-14 scroll-mt-6">
+        <div class="flex items-baseline gap-3 mb-6 pb-2 border-b-2 border-[#F5C518]">
+          <span class="font-mono text-xs text-[#F5C518] tracking-widest">TERMS</span>
+          <h2 class="text-xl font-bold">{g.label}</h2>
+        </div>
+
+        <dl class="space-y-4">
+          {g.terms.map(t => (
+            <div id={anchor(t.en)} class="border border-gray-100 rounded-lg overflow-hidden scroll-mt-6">
+              <dt class="bg-gray-50 px-4 py-3 border-b border-gray-100">
+                <span class="font-bold text-gray-900">{t.term}</span>
+                <span class="font-mono text-xs text-gray-400 ml-2">{t.en}</span>
+              </dt>
+              <dd class="p-4">
+                <p class="text-gray-700 leading-relaxed mb-3">{t.def}</p>
+                <div class="bg-yellow-50/50 border-l-2 border-[#F5C518] pl-3 py-2">
+                  <p class="text-sm text-gray-800 leading-relaxed">{t.mine}</p>
+                  <a
+                    href={`/articles/${t.slug}`}
+                    class="inline-block mt-2 text-sm font-bold text-gray-900 underline underline-offset-4 decoration-[#F5C518] decoration-2"
+                  >
+                    看這篇第一手記錄 →
+                  </a>
+                </div>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))}
+
+    <section class="bg-[#1F2937] text-gray-200 rounded-lg p-6">
+      <p class="text-sm leading-relaxed mb-0">
+        <span class="text-[#F5C518] font-bold">收詞的標準：</span>
+        一個詞要進這份表，必須站內有一篇我自己動手做過的記錄。
+        我看過做 AEO 的公司自己的教學文章全部回傳 500，
+        所以這一頁的每個連結我都會定期掃回傳碼。
+      </p>
+    </section>
+  </article>
+</BaseLayout>

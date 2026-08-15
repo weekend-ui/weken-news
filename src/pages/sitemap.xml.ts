@@ -21,6 +21,7 @@ export async function GET(_context: APIContext) {
     { url: `${siteURL}/case-studies`, priority: '0.8', changefreq: 'monthly' },
     { url: `${siteURL}/positioning`, priority: '0.7', changefreq: 'monthly' },
     { url: `${siteURL}/citations`, priority: '0.7', changefreq: 'weekly' },
+    { url: `${siteURL}/glossary`, priority: '0.8', changefreq: 'monthly' },
     { url: `${siteURL}/stats`, priority: '0.6', changefreq: 'daily' },
   ];
 
